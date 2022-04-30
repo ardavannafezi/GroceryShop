@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Persistence.EF", "src\GroceryShop.Persistence.EF\GroceryShop.Persistence.EF.csproj", "{8DE92EAD-26B1-4217-9812-ED577236EB2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Migrations", "src\GroceryShop.Migrations\GroceryShop.Migrations.csproj", "{F0553CE2-44FA-4525-89B2-60174020E894}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Migrations", "src\GroceryShop.Migrations\GroceryShop.Migrations.csproj", "{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,10 @@ Global
 		{8DE92EAD-26B1-4217-9812-ED577236EB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DE92EAD-26B1-4217-9812-ED577236EB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DE92EAD-26B1-4217-9812-ED577236EB2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0553CE2-44FA-4525-89B2-60174020E894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0553CE2-44FA-4525-89B2-60174020E894}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0553CE2-44FA-4525-89B2-60174020E894}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0553CE2-44FA-4525-89B2-60174020E894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,7 +43,7 @@ Global
 		{3C15C736-ED55-4F38-AE9D-9E51D8FA070F} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
 		{3F3B58E8-666E-44FB-B3AE-E53AA1D821A4} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
 		{8DE92EAD-26B1-4217-9812-ED577236EB2A} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
-		{F0553CE2-44FA-4525-89B2-60174020E894} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
+		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCD6CF0D-0BE9-4E8C-8032-A0FB49EF873A}
