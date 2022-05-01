@@ -47,6 +47,27 @@ namespace GroceryShop.Services.Test.Unit
             expected.Name.Should().Be(dto.Name);
         }
 
+        [Fact]
+        public void Add_throws_DuplicatedCategoryNameExeption_when_new_category_added_with_name_thatis_Already_exist()
+        {
+
+            var category = new Category
+            {
+                Name = "dummy"
+            };
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            AddCategoryDto dto = GenerateAddCategoryDto();
+           
+            Action expected = () => _sut.Add(dto);
+
+            expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
+
+
+        }
+
+
+
 
         private static AddCategoryDto GenerateAddCategoryDto()
         {

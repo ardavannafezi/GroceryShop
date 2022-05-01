@@ -22,5 +22,10 @@ namespace GroceryShop.Persistence.EF.Categories
         {
             _dataContext.Categories.Add(category);
         }
+
+        public bool IsCategoryExistById(string name)
+        {
+            return _dataContext.Categories.Any(c => c.Name == name);
+        }
     }
     }

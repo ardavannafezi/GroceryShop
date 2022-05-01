@@ -10,6 +10,6 @@ namespace GroceryShop.Services.Categories.Contracts
     public interface CategoryRepository
     {
         public void Add(Category category);
-
+        bool IsCategoryExistById(string name);
     }
 }

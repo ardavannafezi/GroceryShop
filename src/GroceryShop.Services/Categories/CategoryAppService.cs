@@ -28,6 +28,14 @@ namespace GroceryShop.Services.Categories
 
         public void Add(AddCategoryDto dto)
         {
+            var isCategoryExist = _categoryRepository
+                .IsCategoryExistById(dto.Name);
+
+            if (isCategoryExist)
+            {
+                throw new DuplicatedCategoryNameExeption();
+            }
+
             var category = new Category
             {
                 Name = dto.Name,
