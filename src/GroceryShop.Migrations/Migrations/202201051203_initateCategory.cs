@@ -26,7 +26,7 @@ namespace GroceryShop.Migrations
         {
             Create.Table("Categories")
                             .WithColumn("Id").AsInt32().PrimaryKey().NotNullable().Identity()
-                            .WithColumn("Title").AsString(50).NotNullable();
+                            .WithColumn("Name").AsString(50).NotNullable();
         }
 
     }
