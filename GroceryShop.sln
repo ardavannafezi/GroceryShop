@@ -5,13 +5,21 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{353091F7-050A-4F64-BA7D-C6F55EF08A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Entities", "src\GroceryShop.Entities\GroceryShop.Entities.csproj", "{3C15C736-ED55-4F38-AE9D-9E51D8FA070F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Entities", "src\GroceryShop.Entities\GroceryShop.Entities.csproj", "{3C15C736-ED55-4F38-AE9D-9E51D8FA070F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Infrastructure", "src\GroceryShop.Infrastructure\GroceryShop.Infrastructure.csproj", "{3F3B58E8-666E-44FB-B3AE-E53AA1D821A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Infrastructure", "src\GroceryShop.Infrastructure\GroceryShop.Infrastructure.csproj", "{3F3B58E8-666E-44FB-B3AE-E53AA1D821A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Persistence.EF", "src\GroceryShop.Persistence.EF\GroceryShop.Persistence.EF.csproj", "{8DE92EAD-26B1-4217-9812-ED577236EB2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Persistence.EF", "src\GroceryShop.Persistence.EF\GroceryShop.Persistence.EF.csproj", "{8DE92EAD-26B1-4217-9812-ED577236EB2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Migrations", "src\GroceryShop.Migrations\GroceryShop.Migrations.csproj", "{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Migrations", "src\GroceryShop.Migrations\GroceryShop.Migrations.csproj", "{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Services", "src\GroceryShop.Services\GroceryShop.Services.csproj", "{2E88C330-2B9B-473A-9C8A-5496F116130E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6258C4B-7BCB-427D-ADD9-8004D8AA4F6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryShop.Services.Test.Unit", "src\GroceryShop.Services.Test.Unit\GroceryShop.Services.Test.Unit.csproj", "{7F8A375A-D1C4-4684-A862-16B9145CC5C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroceryShop.Specs", "src\GroceryShop.Specs\GroceryShop.Specs.csproj", "{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +43,18 @@ Global
 		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E88C330-2B9B-473A-9C8A-5496F116130E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E88C330-2B9B-473A-9C8A-5496F116130E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E88C330-2B9B-473A-9C8A-5496F116130E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E88C330-2B9B-473A-9C8A-5496F116130E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F8A375A-D1C4-4684-A862-16B9145CC5C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F8A375A-D1C4-4684-A862-16B9145CC5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F8A375A-D1C4-4684-A862-16B9145CC5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F8A375A-D1C4-4684-A862-16B9145CC5C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +64,9 @@ Global
 		{3F3B58E8-666E-44FB-B3AE-E53AA1D821A4} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
 		{8DE92EAD-26B1-4217-9812-ED577236EB2A} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
 		{5CD2C2A6-8FE9-43E9-9E0A-2005AFD39904} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
+		{2E88C330-2B9B-473A-9C8A-5496F116130E} = {353091F7-050A-4F64-BA7D-C6F55EF08A6E}
+		{7F8A375A-D1C4-4684-A862-16B9145CC5C9} = {D6258C4B-7BCB-427D-ADD9-8004D8AA4F6C}
+		{4A7ECD05-54BA-43CF-AF45-AA08AD28BCBF} = {D6258C4B-7BCB-427D-ADD9-8004D8AA4F6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCD6CF0D-0BE9-4E8C-8032-A0FB49EF873A}
