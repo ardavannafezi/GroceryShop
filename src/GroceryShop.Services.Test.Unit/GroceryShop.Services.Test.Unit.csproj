@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GroceryShop.Persistence.EF\GroceryShop.Persistence.EF.csproj" />
+    <ProjectReference Include="..\GroceryShop.Test.Tools\GroceryShop.TestTools.csproj" />
+  </ItemGroup>
+
 </Project>
