@@ -13,5 +13,6 @@ namespace GroceryShop.Services.Categories.Contracts
         bool IsCategoryExistById(string name);
         Category FindById(int id);
         void Update(Category category);
+        IList<GetCategoryDto> GetAll();
     }
 }

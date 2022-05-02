@@ -14,6 +14,7 @@ using GroceryShop.Services.Books.Contracts;
 using BookStore.Persistence.EF;
 using GroceryShop.Services.Categories;
 using GroceryShop.Infrastructure.Application;
+using GroceryShop.TestTools.categories;
 
 namespace GroceryShop.Specs.Categories
 {
@@ -33,7 +34,7 @@ namespace GroceryShop.Specs.Categories
         private readonly CategoryRepository _categoryRepository;
         private Category _category;
         private AddCategoryDto _dto;
-        Action expected;
+        public Action expected;
 
         public GetCategory(ConfigurationFixture configuration) : base(configuration)
         {
@@ -47,7 +48,8 @@ namespace GroceryShop.Specs.Categories
         [Given("دسته بندی با عنوان 'لبنیات'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
-            Category category = CreateCategoryWithNameLabaniyat();
+            var category = CategoryFactory.CreateCategory("labaniyat");
+          
             _dataContext.Manipulate(_ => _.Categories.Add(category));
         }
 
@@ -55,16 +57,17 @@ namespace GroceryShop.Specs.Categories
         [When("درخواست مشاهده فهرست کالا را میدهم")]
         public void When()
         {
-            var expected = _sut.GetAll();
+            _sut.GetAll();
         }
    
         [Then("فهرستی با عنوان 'لبنیات' به ما نشان داده شود")]
         public void Then()
         {
-            Category category = CreateCategoryWithNameLabaniyat();
+            var expected = _sut.GetAll();
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.Name == category.Name);
 
-            _dataContext.Categories.Select(_ => _.Name == category.Name )
-                .Should().HaveCount(1);
         }
 
 
@@ -77,9 +80,6 @@ namespace GroceryShop.Specs.Categories
             , _ => When()
             , _ => Then());
         }
-
-
-    
 
         private static Category CreateCategoryWithNameLabaniyat()
         {

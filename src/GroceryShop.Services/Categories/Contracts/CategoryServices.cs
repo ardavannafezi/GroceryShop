@@ -13,5 +13,6 @@ namespace GroceryShop.Services.Books.Contracts
     {
         void Add(AddCategoryDto dto);
         void Update(UpdateCategoryDto dto, int id);
+        IList<GetCategoryDto> GetAll();
     }
 }

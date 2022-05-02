@@ -13,6 +13,7 @@ using GroceryShop.Services.Books.Contracts;
 using BookStore.Persistence.EF;
 using GroceryShop.Services.Categories;
 using GroceryShop.Infrastructure.Application;
+using GroceryShop.TestTools.categories;
 
 namespace GroceryShop.Specs.Categories
 {
@@ -22,7 +23,7 @@ namespace GroceryShop.Specs.Categories
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
-    public class GetCategory : EFDataContextDatabaseFixture
+    public class AddcategoryWirhDuplicatedName: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -34,7 +35,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public GetCategory(ConfigurationFixture configuration) : base(configuration)
+        public AddcategoryWirhDuplicatedName (ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -46,7 +47,7 @@ namespace GroceryShop.Specs.Categories
         [Given("دسته بندی با عنوان 'لبنیات'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
-            Category category = CreateCategory();
+            var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
         }
 
@@ -65,7 +66,7 @@ namespace GroceryShop.Specs.Categories
         {
 
             var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().Be(CreateCategory().Name);
+            expected.Name.Should().Be(CategoryFactory.CreateCategory("labaniyat").Name);
 
         }
 
@@ -97,13 +98,6 @@ namespace GroceryShop.Specs.Categories
             };
         }
 
-        private static Category CreateCategory()
-        {
-            return new Category
-            {
-                Name = "labaniyat",
-            };
-        }
-
+       
     }
 }

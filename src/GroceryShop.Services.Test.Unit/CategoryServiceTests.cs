@@ -62,9 +62,27 @@ namespace GroceryShop.Services.Test.Unit
             expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
         }
 
+        [Fact]
+        public void GetAll_gets_all_Existing_Categories()
+        {
+            Category category = CreateCategoryWithNameLabaniyat();
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var expected = _sut.GetAll();
 
 
+           expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.Name == category.Name);
 
+        }
+
+        private static Category CreateCategoryWithNameLabaniyat()
+        {
+            return new Category
+            {
+                Name = "labaniyat"
+            };
+        }
         private static AddCategoryDto GenerateAddCategoryDto()
         {
             return new AddCategoryDto
