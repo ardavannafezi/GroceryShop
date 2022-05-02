@@ -11,5 +11,7 @@ namespace GroceryShop.Services.Categories.Contracts
     {
         public void Add(Category category);
         bool IsCategoryExistById(string name);
+        Category FindById(int id);
+        void Update(Category category);
     }
 }

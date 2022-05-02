@@ -1,4 +1,5 @@
-﻿using GroceryShop.Infrastructure.Application;
+﻿using GroceryShop.Entities;
+using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Categories.Contracts;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace GroceryShop.Services.Books.Contracts
     public interface CategoryServices : Service
     {
         void Add(AddCategoryDto dto);
+        void Update(UpdateCategoryDto dto, int id);
     }
 }

@@ -43,5 +43,22 @@ namespace GroceryShop.Services.Categories
             _repository.Add(category);
             _unitOfWork.Commit();
         }
+
+        public IList<GetCategoryDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+        public void Update(UpdateCategoryDto dto, int id)
+        {
+            var category = _repository.FindById(id);
+
+            category.Id = id;
+            category.Name = dto.Name;
+            
+            _repository.Update(category);
+            _unitOfWork.Commit();
+
+        }
     }
 }
