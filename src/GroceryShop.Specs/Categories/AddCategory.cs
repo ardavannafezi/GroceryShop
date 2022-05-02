@@ -66,7 +66,6 @@ namespace GroceryShop.Specs.Categories
             expected.Name.Should().Be(_dto.Name);
         }
 
-
         [Fact]
         public void Run()
         {
