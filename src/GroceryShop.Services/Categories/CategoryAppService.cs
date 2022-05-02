@@ -49,16 +49,20 @@ namespace GroceryShop.Services.Categories
             return _repository.GetAll();
         }
 
-        public void Update(UpdateCategoryDto dto, int id)
+        public void Update(UpdateCategoryDto dto, string name)
         {
-            var category = _repository.FindById(id);
+            Category category = _repository.FindByName(name);
 
-            category.Id = id;
             category.Name = dto.Name;
-            
+
             _repository.Update(category);
             _unitOfWork.Commit();
 
+        }
+
+        public void Update(UpdateCategoryDto dto, int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

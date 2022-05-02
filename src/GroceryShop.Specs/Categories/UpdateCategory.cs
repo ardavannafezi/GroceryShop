@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
@@ -18,13 +17,13 @@ using GroceryShop.TestTools.categories;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("مشاهده دسته بندی کالای")]
+    [Scenario("تعریف دسته بندی")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را مشاهده کنم"
+        InOrderTo = "آنها را تعریف کنم"
     )]
-    public class GetCategory : EFDataContextDatabaseFixture
+    public class UpdateCategory: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -34,9 +33,9 @@ namespace GroceryShop.Specs.Categories
         private readonly CategoryRepository _categoryRepository;
         private Category _category;
         private AddCategoryDto _dto;
-        public Action expected;
+        Action expected;
 
-        public GetCategory(ConfigurationFixture configuration) : base(configuration)
+        public UpdateCategory(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -49,29 +48,26 @@ namespace GroceryShop.Specs.Categories
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
-          
             _dataContext.Manipulate(_ => _.Categories.Add(category));
         }
 
 
-        [When("درخواست مشاهده فهرست کالا را میدهم")]
+        [When("دسته بندی با عنوان 'لبنیات' را به 'پروتئینی' ویرایش میکنم")]
         public void When()
         {
-            _sut.GetAll();
+           var categoryDto = CategoryFactory.UpdateCategoryDto("Protoeny");
+
+           _sut.Update(categoryDto, "labaniyat");
         }
-   
-        [Then("فهرستی با عنوان 'لبنیات' به ما نشان داده شود")]
+
+        [Then("دسته بندی با عنوان 'پروتئین' در فهرست دسته بندی کالا باید وجود داشته باشد ")]
         public void Then()
         {
-            var expected = _sut.GetAll();
-            var category = CategoryFactory.CreateCategory("labaniyat");
 
-            expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.Name == category.Name);
+            var expected = _dataContext.Categories.FirstOrDefault();
+            expected.Name.Should().Be(CategoryFactory.CreateCategory("Protoeny").Name);
 
         }
-
-
 
         [Fact]
         public void Run()
@@ -82,13 +78,9 @@ namespace GroceryShop.Specs.Categories
             , _ => Then());
         }
 
-        private static Category CreateCategoryWithNameLabaniyat()
-        {
-            return new Category
-            {
-                Name = "labaniyat"
-            };
-        }
 
+
+
+       
     }
 }

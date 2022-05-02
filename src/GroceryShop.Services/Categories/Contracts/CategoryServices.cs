@@ -12,7 +12,7 @@ namespace GroceryShop.Services.Books.Contracts
     public interface CategoryServices : Service
     {
         void Add(AddCategoryDto dto);
-        void Update(UpdateCategoryDto dto, int id);
+        void Update(UpdateCategoryDto dto, string name);
         IList<GetCategoryDto> GetAll();
     }
 }

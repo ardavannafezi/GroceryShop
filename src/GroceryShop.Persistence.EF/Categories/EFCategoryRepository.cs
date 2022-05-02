@@ -23,9 +23,14 @@ namespace GroceryShop.Persistence.EF.Categories
             _dataContext.Categories.Add(category);
         }
 
-        public Category FindById(int id)
+        public Category FindById(string name)
         {
-            return _dataContext.Categories.FirstOrDefault(_ => _.Id == id);
+            return _dataContext.Categories.FirstOrDefault(x => x.Name == name);
+        }
+
+        public Category FindByName(string name)
+        {
+            return _dataContext.Categories.FirstOrDefault(x => x.Name == name);
         }
 
         public IList<GetCategoryDto> GetAll()

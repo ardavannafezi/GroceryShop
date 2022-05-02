@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="FluentAssertions" Version="6.6.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GroceryShop.Persistence.EF\GroceryShop.Persistence.EF.csproj" />
     <ProjectReference Include="..\GroceryShop.Services\GroceryShop.Services.csproj" />
+    <ProjectReference Include="..\GroceryShop.Test.Tools\GroceryShop.TestTools.csproj" />
   </ItemGroup>
 
 
