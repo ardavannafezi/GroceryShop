@@ -39,7 +39,7 @@ namespace GroceryShop.Services.Test.Unit
         [Fact]
         public void Add_adds_new_category_properly()
         {
-            AddCategoryDto dto = GenerateAddCategoryDto();
+            AddCategoryDto dto = CategoryFactory.AddCategoryDto("dummy");
             _sut.Add(dto);
 
             var expected = _dataContext.Categories
@@ -55,8 +55,8 @@ namespace GroceryShop.Services.Test.Unit
                 Name = "dummy",
             }; _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            AddCategoryDto dto = GenerateAddCategoryDto();
-           
+            var dto = CategoryFactory.AddCategoryDto("dummy");
+
             Action expected = () => _sut.Add(dto);
 
             expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
@@ -65,7 +65,7 @@ namespace GroceryShop.Services.Test.Unit
         [Fact]
         public void GetAll_gets_all_Existing_Categories()
         {
-            Category category = CreateCategoryWithNameLabaniyat();
+            var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             var expected = _sut.GetAll();
@@ -76,19 +76,24 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        private static Category CreateCategoryWithNameLabaniyat()
+        [Fact]
+        public void Update_Throws_DuplicatedCategoryExeption_if_new_category_name_already_exist()
         {
-            return new Category
-            {
-                Name = "labaniyat"
-            };
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var categoryToUpdate = CategoryFactory.CreateCategory("perotoeny");
+            _dataContext.Manipulate(_ => _.Categories.Add(categoryToUpdate));
+
+            var categoryDto = CategoryFactory.UpdateCategoryDto("labaniyat");
+
+            Action expected = () => _sut.Update(categoryDto, "perotoeny");
+            expected.Should().ThrowExactly <TheCategoryNameAlreadyExist> ();
+
+            var expectedToBe = _dataContext.Categories
+                .FirstOrDefault();
+            expectedToBe.Name.Should().Be(category.Name);
         }
-        private static AddCategoryDto GenerateAddCategoryDto()
-        {
-            return new AddCategoryDto
-            {
-                Name = "dummy",
-            };
-        }
+
     }
 }

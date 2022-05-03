@@ -19,5 +19,12 @@ namespace GroceryShop.TestTools.categories
                 Name = name
             };
         }
+        public static AddCategoryDto AddCategoryDto(string name)
+        {
+            return new AddCategoryDto
+            {
+                Name = name
+            };
+        }
     }
 }
