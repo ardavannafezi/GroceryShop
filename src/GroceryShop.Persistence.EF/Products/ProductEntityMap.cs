@@ -9,23 +9,29 @@ using System.Threading.Tasks;
 
 namespace GroceryShop.Persistence.EF.Categories
 {
-    public class CategoryEntityMap : IEntityTypeConfiguration<Category>
+    public class ProductEntityMap : IEntityTypeConfiguration<Product>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+        public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("Categories");
+            builder.ToTable("Products");
 
             builder.HasKey(_ => _.Id);
-
             builder.Property(_ => _.Id)
                 .ValueGeneratedOnAdd();
-
+                
             builder.Property(_ => _.Name);
 
-            builder.HasMany(_ => _.Products)
-                .WithOne(_ => _.Category)
-                .HasForeignKey(_ => _.CategoryId)
-                .OnDelete(DeleteBehavior.ClientNoAction);
+            builder.Property(_ => _.MaxInStock);
+
+            builder.Property(_ => _.MinInStock);
+
+            builder.Property(_ => _.Quantity);
+
+            builder.Property(_ => _.SellPrice);
+
+            builder.Property(_ => _.BuyPrice);
+
+
         }
     }
 }
