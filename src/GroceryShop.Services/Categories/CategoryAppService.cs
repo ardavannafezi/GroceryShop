@@ -44,6 +44,11 @@ namespace GroceryShop.Services.Categories
             _unitOfWork.Commit();
         }
 
+        public void Delete(string name)
+        {
+            _repository.Delete(name);
+        }
+
         public IList<GetCategoryDto> GetAll()
         {
             return _repository.GetAll();
@@ -53,6 +58,11 @@ namespace GroceryShop.Services.Categories
         {
 
             bool isCategoryAlreadyExist = _repository.IsCategoryExist(dto.Name);
+            if (isCategoryAlreadyExist)
+            {
+                throw new TheCategoryNameAlreadyExist();
+            }
+
             Category category = _repository.FindByName(name);
 
             category.Name = dto.Name;

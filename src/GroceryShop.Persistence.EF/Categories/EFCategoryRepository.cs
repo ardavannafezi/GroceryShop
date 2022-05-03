@@ -23,6 +23,10 @@ namespace GroceryShop.Persistence.EF.Categories
             _dataContext.Categories.Add(category);
         }
 
+        public void Delete(string name)
+        {
+            _dataContext.Categories.Remove(FindByName(name));
+        }
 
         public Category FindByName(string name)
         {
