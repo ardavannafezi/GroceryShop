@@ -95,5 +95,16 @@ namespace GroceryShop.Services.Test.Unit
             expectedToBe.Name.Should().Be(category.Name);
         }
 
+        [Fact]
+        public void Delete_delete_category_properly()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            _sut.Delete(category.Name);
+            _unitOfWork.Commit();
+
+            _dataContext.Categories.FirstOrDefault(_ => _.Name == category.Name).Should().BeNull();
+        }
     }
 }
