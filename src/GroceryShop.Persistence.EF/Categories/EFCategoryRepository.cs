@@ -23,10 +23,6 @@ namespace GroceryShop.Persistence.EF.Categories
             _dataContext.Categories.Add(category);
         }
 
-        public Category FindById(string name)
-        {
-            return _dataContext.Categories.FirstOrDefault(x => x.Name == name);
-        }
 
         public Category FindByName(string name)
         {
@@ -41,6 +37,18 @@ namespace GroceryShop.Persistence.EF.Categories
                    Name = x.Name,
                    Id = x.Id,
                }).ToList();
+        }
+
+        public bool IsCategoryExist(string name)
+        {
+            if (_dataContext.Categories.Any(x => x.Name == name))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IsCategoryExistById(string name)

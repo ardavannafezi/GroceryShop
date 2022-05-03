@@ -51,6 +51,8 @@ namespace GroceryShop.Services.Categories
 
         public void Update(UpdateCategoryDto dto, string name)
         {
+
+            bool isCategoryAlreadyExist = _repository.IsCategoryExist(dto.Name);
             Category category = _repository.FindByName(name);
 
             category.Name = dto.Name;
@@ -60,9 +62,5 @@ namespace GroceryShop.Services.Categories
 
         }
 
-        public void Update(UpdateCategoryDto dto, int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
