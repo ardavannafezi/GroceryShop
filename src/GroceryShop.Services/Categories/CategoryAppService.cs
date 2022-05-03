@@ -46,6 +46,12 @@ namespace GroceryShop.Services.Categories
 
         public void Delete(string name)
         {
+            bool isCategoryAlreadyExist = _repository.IsCategoryExist(name);
+            if (isCategoryAlreadyExist == false)
+            {
+                throw new CategoryNotFoundExeption();
+            }
+
             _repository.Delete(name);
         }
 

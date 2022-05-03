@@ -76,11 +76,6 @@ namespace GroceryShop.Specs.Categories
                 _ => Given()
             , _ => When()
             , _ => Then());
-        }
-
-
-
-
-       
+        }   
     }
 }

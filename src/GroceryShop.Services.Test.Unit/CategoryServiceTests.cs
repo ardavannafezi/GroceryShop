@@ -106,5 +106,14 @@ namespace GroceryShop.Services.Test.Unit
 
             _dataContext.Categories.FirstOrDefault(_ => _.Name == category.Name).Should().BeNull();
         }
+
+        [Fact]
+        public void Delete_Category_that_not_exist_should_throw_CategoryNotFoundExeption()
+        {
+            string categoryName = "DoesNotExistDummy";
+            Action expected = () => _sut.Delete(categoryName);
+            expected.Should().ThrowExactly<CategoryNotFoundExeption>();
+            _unitOfWork.Commit();    
+        }
     }
 }
