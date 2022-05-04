@@ -48,7 +48,7 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست دسته بندی کالا وجود دارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست  کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -77,7 +77,7 @@ namespace GroceryShop.Specs.Categories
             expected = () => _sut.Add(dto);
         }
 
-        [Then("تنها یک کالا با عنوان ' ماست شیرازی' باید در فهرست کالا وجود داشته باشد  ")]
+        [Then("تنها یک کالا با کد '2' باید در فهرست کالا وجود داشته باشد  ")]
         public void Then()
         {
             var expected = _dataContext.Products.Count(_ => _.ProductCode == 2);
@@ -85,10 +85,9 @@ namespace GroceryShop.Specs.Categories
             
         }
 
-        [And("خطایی با عنوان 'عنوان دسته بندی کالا تکراریست ' باید رخ دهد.")]
+        [And("خطایی با عنوان ' کد کالا تکراریست ' باید رخ دهد.")]
         public void ThenAnd()
         {
-
             expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
         }
 

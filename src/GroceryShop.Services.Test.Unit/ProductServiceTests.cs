@@ -87,6 +87,34 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
+        [Fact]
+        public void Add_throws_DuplicatedPRoductCodeExeption_when_new_product_added_with_ProductCode_thatis_Already_exist()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+
+            var dto = new ProductDtoBuilder()
+              .WithName("maste kaleh")
+              .WithCategoryName("labaniyat")
+              .WithProductCode(2)
+              .Build();
+
+            Action expected = () => _sut.Add(dto);
+            expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
+
+            _dataContext.Products.Count(_ => _.ProductCode == 2).Should().Be(1);
+
+        }
+
         //[Fact]
         //public void GetAll_gets_all_Existing_Categories()
         //{

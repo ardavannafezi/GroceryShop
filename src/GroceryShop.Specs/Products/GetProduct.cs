@@ -24,10 +24,10 @@ namespace GroceryShop.Specs.Categories
     [Scenario("تعریف دسته بندی")]
     [Feature("",
         AsA = "فروشنده ",
-        IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را تعریف کنم"
+        IWantTo = "   کالا را مدیریت کنم",
+        InOrderTo = "آنها را نمایش کنم"
     )]
-    public class AddProductWithDuplicatedName: EFDataContextDatabaseFixture
+    public class GetProduct: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public AddProductWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
+        public GetProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,7 +48,7 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست کالا وجود دارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست  کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -61,37 +61,24 @@ namespace GroceryShop.Specs.Categories
                .WithProductCode(2)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
-
         }
 
 
-        [When("کالایی با عنوان 'ماست شیرازی' تعریف میکنم")]
+        [When("میخواهیم تمامی کالا های فهرست را مشاهده کنیم")]
         public void When()
         {
-            var dto = new ProductDtoBuilder()
-               .WithName("maste shirazi")
-               .WithCategoryName("labaniyat")
-               .WithProductCode(3)
-               .Build();
-
-            expected = () => _sut.Add(dto);
+            _sut.GetAll();
         }
 
-        [Then("تنها یک کالا با عنوان ' ماست شیرازی' باید در فهرست کالا وجود داشته باشد  ")]
+        [Then("کالایی با عنوان 'ماست شیرازی' و کد 2 به ما نشان داده می شود")]
         public void Then()
         {
-            var expected = _dataContext.Products.Count(_ => _.Name == "maste shirazi");
-            expected.Should().Be(1);
-            
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.Name == "maste shirazi");
+
         }
-
-        [And("خطایی با عنوان 'عنوان کالا تکراریست ' باید رخ دهد.")]
-        public void ThenAnd()
-        {
-
-            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
-        }
-
 
         [Fact]
         public void Run()
@@ -99,8 +86,7 @@ namespace GroceryShop.Specs.Categories
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then()
-            , _ => ThenAnd());;
+            , _ => Then());
         }      
     }
 }

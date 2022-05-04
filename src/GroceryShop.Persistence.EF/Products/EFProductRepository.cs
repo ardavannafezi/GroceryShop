@@ -49,5 +49,23 @@ namespace GroceryShop.Persistence.EF.Products
             }
             
         }
+
+
+        public IList<GetProductDto> GetAll()
+        {
+            return _dataContext.Products
+               .Select(x => new GetProductDto
+               {
+                   ProductCode = x.ProductCode,
+                   Name = x.Name,
+                   CategoryId = x.CategoryId,
+                   MaxInStock = x.MaxInStock,
+                   MinInStock = x.MinInStock,
+                   BuyPrice = x.BuyPrice,
+                   SellPrice = x.SellPrice,
+                   Quantity = x.Quantity,
+
+               }).ToList();
+        }
     }
 }
