@@ -40,4 +40,41 @@ namespace GroceryShop.TestTools.categories
             return productDto;
         }
     }
+    public class UpdateProductDtoBuilder
+    {
+        UpdateProductDto productDto;
+        public UpdateProductDtoBuilder()
+        {
+            productDto = new UpdateProductDto
+            {
+                ProductCode = 1,
+                Name = "dummy",
+                CategoryName = "dummy",
+                MaxInStock = 5,
+                MinInStock = 1,
+                BuyPrice = 100,
+                SellPrice = 200,
+                Quantity = 4,
+            };
+        }
+        public UpdateProductDtoBuilder WithProductCode(int code)
+        {
+            productDto.ProductCode = code;
+            return this;
+        }
+        public UpdateProductDtoBuilder WithName(string name)
+        {
+            productDto.Name = name;
+            return this;
+        }
+        public UpdateProductDtoBuilder WithCategoryName(string name)
+        {
+            productDto.CategoryName = name;
+            return this;
+        }
+        public UpdateProductDto Build()
+        {
+            return productDto;
+        }
+    }
 }

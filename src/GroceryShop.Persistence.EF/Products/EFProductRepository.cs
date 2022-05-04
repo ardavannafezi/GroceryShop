@@ -66,5 +66,38 @@ namespace GroceryShop.Persistence.EF.Products
                    Quantity = x.Quantity,
                }).ToList();
         }
+
+        public Product FindByName(int code)
+        {
+           return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code);
+        }
+
+        public void Update(Product product)
+        {
+            _dataContext.Update(product);
+        }
+
+        public bool isNameAlreadyExist(string name)
+        {
+            if (_dataContext.Products.Any(Products => Products.Name == name))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool isCodeAlreadyExist(int code)
+        {
+            if (_dataContext.Products.Any(Products => Products.ProductCode == code))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

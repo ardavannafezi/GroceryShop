@@ -55,7 +55,7 @@ namespace GroceryShop.Services.Test.Unit
             _sut.Add(product);
 
 
-            var expected = _dataContext.Products.FirstOrDefault(_ => _.Name == "maste kaleh");
+            var expected = _dataContext.Products.FirstOrDefault(_ => _.Name == product.Name);
             expected.Should().NotBeNull();
         }
 
@@ -83,7 +83,7 @@ namespace GroceryShop.Services.Test.Unit
             Action expected = () => _sut.Add(dto);
             expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
 
-            _dataContext.Products.Count(_ => _.Name == "maste shirazi").Should().Be(1);
+            _dataContext.Products.Count(_ => _.Name == product.Name).Should().Be(1);
 
         }
 
@@ -111,7 +111,7 @@ namespace GroceryShop.Services.Test.Unit
             Action expected = () => _sut.Add(dto);
             expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
 
-            _dataContext.Products.Count(_ => _.ProductCode == 2).Should().Be(1);
+            _dataContext.Products.Count(_ => _.ProductCode == product.ProductCode).Should().Be(1);
 
         }
 
@@ -133,7 +133,7 @@ namespace GroceryShop.Services.Test.Unit
 
 
             expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.Name == "maste shirazi");
+            expected.Should().Contain(_ => _.Name == product.Name);
 
         }
 

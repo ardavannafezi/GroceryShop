@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.Categories
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
-    public class AddProduct: EFDataContextDatabaseFixture
+    public class UpdateProduct: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public AddProduct(ConfigurationFixture configuration) : base(configuration)
+        public UpdateProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,33 +48,41 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("هیچ کالایی در فهرست کالا وجود ندارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
         }
 
-
-        [When("کالایی با عنوان ماست کاله و کد 2 تعریف می کنیم")]
+        [When("کالایی با کد 2 را به عنوان 'ماست کاله' ویرایش می کنیم")]
         public void When()
         {
-            var dto = new ProductDtoBuilder()
+            var dto = new UpdateProductDtoBuilder()
                .WithName("maste kaleh")
                .WithCategoryName("labaniyat")
                .WithProductCode(2)
                .Build();
+            _sut.Update(dto, 2);
 
-            _sut.Add(dto);
         }
 
-        [Then("کالایی با عنوان ماست کاله و کد 2 باید وجود داشته باشد ")]
+        [Then("کالای کد 2 با عنوان 'ماست کاله' در فهرست کالا موجود می باشد")]
         public void Then()
         {
-            var expected = _dataContext.Products.FirstOrDefault(_ => _.Name == "maste kaleh");
-            expected.Should().NotBeNull();
+            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2 && _.Name == "maste kaleh");
+            expected.Should().BeTrue();
             
         }
+
 
         [Fact]
         public void Run()
@@ -82,7 +90,8 @@ namespace GroceryShop.Specs.Categories
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then());
+            , _ => Then()
+            );;
         }      
     }
 }

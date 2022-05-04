@@ -63,5 +63,40 @@ namespace GroceryShop.Services.Products
         {
                 return _repository.GetAll();
         }
+
+        public void Update(UpdateProductDto dto, int id)
+        {
+
+            bool isProductNameAlreadyExist = _repository.isNameAlreadyExist(dto.Name);
+            if (isProductNameAlreadyExist)
+            {
+                throw new ProductNameIsDuplicatedExeption();
+            }
+            bool isProductCodeAlreadyExist = _repository.isCodeAlreadyExist(dto.ProductCode);
+            if (isProductCodeAlreadyExist && id != dto.ProductCode)
+            {
+                throw new ProductCodeIsDuplicatedExeption();
+            }
+
+
+            Product product = _repository.FindByName(dto.ProductCode);
+
+            var categoryId = _categoryRepository.FindByName(dto.CategoryName).Id;
+
+            product.Name = dto.Name;
+            product.BuyPrice = dto.BuyPrice;
+            product.SellPrice = dto.SellPrice;
+            product.Quantity = dto.Quantity;
+            product.CategoryId = categoryId;
+            product.ProductCode = dto.ProductCode;
+            product.MaxInStock = dto.MaxInStock;
+            product.MinInStock = dto.MinInStock;
+
+
+
+            _repository.Update(product);
+            _unitOfWork.Commit();
+
+        }
     }
 }
