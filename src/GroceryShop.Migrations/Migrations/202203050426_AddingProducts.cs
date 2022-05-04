@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroceryShop.Migrations
 {
-    [Migration(20220305346)]
-    public class _20220305346 : Migration
+    [Migration(202203050426)]
+    public class _202203050426 : Migration
     {
 
         public override void Up()
@@ -25,7 +25,7 @@ namespace GroceryShop.Migrations
         private void CreateProduct()
         {
             Create.Table("Products")
-                            .WithColumn("Id").AsInt32().PrimaryKey().NotNullable().Identity()
+                            .WithColumn("ProductCode").AsInt32().PrimaryKey().NotNullable().Unique()
                             .WithColumn("Name").AsString(50).NotNullable()
                             .WithColumn("CategoryId").AsInt32().NotNullable()
                             .ForeignKey("FK_Products_Categories", "Categories", "Id")

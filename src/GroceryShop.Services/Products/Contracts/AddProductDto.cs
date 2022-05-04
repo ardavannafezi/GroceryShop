@@ -4,20 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroceryShop.Entities
+namespace GroceryShop.Services.Categories.Contracts
 {
-    public class Product
+    public class AddProductDto
     {
         public int ProductCode { get; set; }
+
         public string Name { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public double BuyPrice { get; set; }
         public double SellPrice { get; set; }
         public int Quantity { get; set; }
         public int? MaxInStock { get; set; }
         public int? MinInStock { get; set; }
-
-
-        public Category Category { get; set; }
     }
 }

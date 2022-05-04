@@ -15,9 +15,8 @@ namespace GroceryShop.Persistence.EF.Categories
         {
             builder.ToTable("Products");
 
-            builder.HasKey(_ => _.Id);
-            builder.Property(_ => _.Id)
-                .ValueGeneratedOnAdd();
+            builder.HasKey(_ => _.ProductCode);
+            builder.Property(_ => _.ProductCode);
                 
             builder.Property(_ => _.Name);
 
