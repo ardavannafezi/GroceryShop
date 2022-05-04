@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace GroceryShop.Services.Products
 {
     [Serializable]
-    internal class ProductNameIsDuplicatedExeption : Exception
+    public class ProductNameIsDuplicatedExeption : Exception
     {
         public ProductNameIsDuplicatedExeption()
         {

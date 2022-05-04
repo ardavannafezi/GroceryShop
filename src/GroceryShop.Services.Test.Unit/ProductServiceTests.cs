@@ -58,20 +58,20 @@ namespace GroceryShop.Services.Test.Unit
             expected.Should().NotBeNull();
         }
 
-        //[Fact]
-        //public void Add_throws_DuplicatedCategoryNameExeption_when_new_category_added_with_name_thatis_Already_exist()
-        //{
-        //    var category = new Category
-        //    {
-        //        Name = "dummy",
-        //    }; _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void Add_throws_DuplicatedPRoductNameExeption_when_new_product_added_with_name_thatis_Already_exist()
+        {
+            var category = new Category
+            {
+                Name = "dummy",
+            }; _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    var dto = CategoryFactory.AddCategoryDto("dummy");
+            var dto = CategoryFactory.AddCategoryDto("dummy");
 
-        //    Action expected = () => _sut.Add(dto);
+            Action expected = () => _sut.Add(dto);
 
-        //    expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
-        //}
+            expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
+        }
 
         //[Fact]
         //public void GetAll_gets_all_Existing_Categories()

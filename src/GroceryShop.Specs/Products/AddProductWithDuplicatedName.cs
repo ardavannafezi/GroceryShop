@@ -54,8 +54,10 @@ namespace GroceryShop.Specs.Categories
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
                .WithProductCode(2)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
@@ -63,25 +65,33 @@ namespace GroceryShop.Specs.Categories
         }
 
 
-        [When("کالایی با عنوان ماست کاله و کد 2 تعریف می کنیم")]
+        [When("کالایی با عنوان 'ماست شیرازی' تعریف میکنم")]
         public void When()
         {
             var product = new ProductDtoBuilder()
-               .WithName("maste kaleh")
+               .WithName("maste shirazi")
                .WithCategoryName("labaniyat")
-               .WithProductCode(2)
+               .WithProductCode(3)
                .Build();
 
-            _sut.Add(product);
+            expected = () => _sut.Add(product);
         }
 
-        [Then("کالایی با عنوان ماست کاله و کد 2 باید وجود داشته باشد ")]
+        [Then("تنها یک کالا با عنوان ' ماست شیرازی' باید در فهرست کالا وجود داشته باشد  ")]
         public void Then()
         {
-            var expected = _dataContext.Products.FirstOrDefault(_ => _.Name == "maste kaleh");
-            expected.Should().NotBeNull();
+            var expected = _dataContext.Products.Count(_ => _.Name == "maste shirazi");
+            expected.Should().Be(1);
             
         }
+
+        [And("خطایی با عنوان 'عنوان دسته بندی کالا تکراریست ' باید رخ دهد.")]
+        public void ThenAnd()
+        {
+
+            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+        }
+
 
         [Fact]
         public void Run()
@@ -89,7 +99,8 @@ namespace GroceryShop.Specs.Categories
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then());
+            , _ => Then()
+            , _ => ThenAnd());;
         }      
     }
 }
