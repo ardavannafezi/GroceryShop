@@ -264,13 +264,14 @@ namespace GroceryShop.Services.Test.Unit
             ;
         }
 
-        //[Fact]
-        //public void Delete_Category_that_not_exist_should_throw_CategoryNotFoundExeption()
-        //{
-        //    string categoryName = "DoesNotExistDummy";
-        //    Action expected = () => _sut.Delete(categoryName);
-        //    expected.Should().ThrowExactly<CategoryNotFoundExeption>();
-        //    _unitOfWork.Commit();    
-        //}
+
+        [Fact]
+        public void Delete_throw_ProductNotFound_exeption_when_code_doesnt_exist()
+        {
+
+            Action expected = () => _sut.Delete(2);
+            expected.Should().ThrowExactly<ProductNotFoundExeption>();          
+        }
+
     }
 }
