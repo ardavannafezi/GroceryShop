@@ -66,12 +66,14 @@ namespace GroceryShop.Services.Products
 
         public void Update(UpdateProductDto dto, int id)
         {
+            string productName = _repository.GetNameByCode(id);
 
             bool isProductNameAlreadyExist = _repository.isNameAlreadyExist(dto.Name);
-            if (isProductNameAlreadyExist)
+            if (isProductNameAlreadyExist && productName != dto.Name)
             {
                 throw new ProductNameIsDuplicatedExeption();
             }
+
             bool isProductCodeAlreadyExist = _repository.isCodeAlreadyExist(dto.ProductCode);
             if (isProductCodeAlreadyExist && id != dto.ProductCode)
             {

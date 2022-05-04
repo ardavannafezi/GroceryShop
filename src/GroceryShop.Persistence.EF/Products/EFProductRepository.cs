@@ -99,5 +99,10 @@ namespace GroceryShop.Persistence.EF.Products
                 return false;
             }
         }
+
+        public string GetNameByCode(int code)
+        {
+            return _dataContext.Products.FirstOrDefault(Products=>Products.ProductCode == code).Name;
+        }
     }
 }

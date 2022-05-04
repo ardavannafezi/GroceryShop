@@ -17,5 +17,6 @@ namespace GroceryShop.Services.Products.Contracts
         void Update(Product product);
         bool isNameAlreadyExist(string name);
         bool isCodeAlreadyExist(int code);
+        string GetNameByCode(int code);
     }
 }

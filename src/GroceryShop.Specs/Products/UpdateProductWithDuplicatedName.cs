@@ -25,7 +25,7 @@ namespace GroceryShop.Specs.Categories
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را تعریف کنم"
+        InOrderTo = "آنها را ویرایش کنم"
     )]
     public class UpdateProductWithDuplicatedName: EFDataContextDatabaseFixture
     {
