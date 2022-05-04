@@ -67,7 +67,7 @@ namespace GroceryShop.Persistence.EF.Products
                }).ToList();
         }
 
-        public Product FindByName(int code)
+        public Product FindById(int code)
         {
            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code);
         }
@@ -103,6 +103,11 @@ namespace GroceryShop.Persistence.EF.Products
         public string GetNameByCode(int code)
         {
             return _dataContext.Products.FirstOrDefault(Products=>Products.ProductCode == code).Name;
+        }
+
+        public void Delete(Product product)
+        {
+            _dataContext.Remove(product);
         }
     }
 }

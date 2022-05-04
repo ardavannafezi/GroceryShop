@@ -21,13 +21,13 @@ using GroceryShop.TestTools.Products;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("ویرایش کالا")]
+    [Scenario("تعریف دسته بندی")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را ویرایش کنم"
+        InOrderTo = "آنها را تعریف کنم"
     )]
-    public class UpdateProductWithDuplicatedName: EFDataContextDatabaseFixture
+    public class DeleteProduct: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public UpdateProductWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
+        public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,7 +48,7 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست کالا وجود دارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -58,63 +58,38 @@ namespace GroceryShop.Specs.Categories
             var product = new ProductFactory()
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
-               .WithProductCode(2)
+               .WithProductCode(4)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
+
         }
 
-        [And(" کالایی با عنوان 'ماست کاله' و کد 3در فهرست کالا وجود دارد")]
-        public void And()
-        {
 
-            int categoryId = _categoryRepository.FindByName("labaniyat").Id;
-            var product = new ProductFactory()
-               .WithName("maste kaleh")
-               .WithCategoryId(categoryId)
-               .WithProductCode(3)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-        }
-
-        [When("کالایی با کد 03 ر به عنوان 'ماست شیرازی' ویرایش می کنیم")]
+        [When("کالای با کد '02'  را حذف می کنیم")]
         public void When()
         {
-            var dto = new UpdateProductDtoBuilder()
-               .WithName("maste shirazi")
-               .WithCategoryName("labaniyat")
-               .WithProductCode(3)
-               .Build();
-
-            expected = () => _sut.Update(dto, 3);
-
+            _sut.Delete(4);
         }
 
-        [Then("تنها کالای 02 با عنوان 'ماست شیرازی' باید در کالا وجود داشته باشد")]
+        [Then("هیچ کالایی در فهرست کالا ها با کد '02' وجود ندارد  ")]
         public void Then()
         {
-            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2 && _.Name == "maste shirazi");
-            expected.Should().BeTrue();
+            var expected = _dataContext.Products.Any(_ => _.ProductCode == 4);
+            expected.Should().BeFalse();
             
         }
 
-        [And("")]
-        public void ThenAnd()
-        {
-            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+      
 
-        }
 
         [Fact]
         public void Run()
         {
             Runner.RunScenario(
                 _ => Given()
-            , _ => And()
             , _ => When()
             , _ => Then()
-            , _ => ThenAnd()
-
-            ); ;
+           );;
         }      
     }
 }

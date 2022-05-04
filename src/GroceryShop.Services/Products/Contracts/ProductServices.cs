@@ -12,5 +12,6 @@ namespace GroceryShop.Services.Products.Contracts
         void Add(AddProductDto product);
         IList<GetProductDto> GetAll();
         void Update(UpdateProductDto dto, int id);
+        void Delete(int code);
     }
 }

@@ -59,6 +59,12 @@ namespace GroceryShop.Services.Products
             _unitOfWork.Commit();
         }
 
+        public void Delete(int code)
+        {
+            _repository.Delete(_repository.FindById(code));
+            _unitOfWork.Commit();
+        }
+
         public IList<GetProductDto> GetAll()
         {
                 return _repository.GetAll();
@@ -81,7 +87,7 @@ namespace GroceryShop.Services.Products
             }
 
 
-            Product product = _repository.FindByName(dto.ProductCode);
+            Product product = _repository.FindById(dto.ProductCode);
 
             var categoryId = _categoryRepository.FindByName(dto.CategoryName).Id;
 

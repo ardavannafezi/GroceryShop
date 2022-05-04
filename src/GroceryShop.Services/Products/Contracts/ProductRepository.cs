@@ -13,10 +13,11 @@ namespace GroceryShop.Services.Products.Contracts
         bool isProductNameExist(string name);
         bool isProductCodeExist(int code);
         IList<GetProductDto> GetAll();
-        Product FindByName(int code);
+        Product FindById(int code);
         void Update(Product product);
         bool isNameAlreadyExist(string name);
         bool isCodeAlreadyExist(int code);
         string GetNameByCode(int code);
+        void Delete(Product product);
     }
 }

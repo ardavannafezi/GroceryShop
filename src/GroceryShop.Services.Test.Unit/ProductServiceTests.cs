@@ -163,24 +163,82 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void Update_Throws_DuplicatedNameExeption_if_new_Product_name_already_exist()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void Update_Throws_DuplicatedNameExeption_if_new_Product_name_already_exist()
+        {
 
-        //    var categoryToUpdate = CategoryFactory.CreateCategory("perotoeny");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(categoryToUpdate));
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    var categoryDto = CategoryFactory.UpdateCategoryDto("labaniyat");
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
 
-        //    Action expected = () => _sut.Update(categoryDto, "perotoeny");
-        //    expected.Should().ThrowExactly<TheCategoryNameAlreadyExist>();
 
-        //    var expectedToBe = _dataContext.Categories
-        //        .FirstOrDefault();
-        //    expectedToBe.Name.Should().Be(category.Name);
-        //}
+            int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
+            var productforEdit = new ProductFactory()
+               .WithName("maste kaleh")
+               .WithCategoryId(categoryId)
+               .WithProductCode(3)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
+
+            var dto = new UpdateProductDtoBuilder()
+               .WithName("maste shirazi")
+               .WithCategoryName("labaniyat")
+               .WithProductCode(3)
+               .Build();
+
+            Action expected = () => _sut.Update(dto, 3);
+            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+
+            _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode && 
+            _.Name == product.Name).Should().BeTrue();
+
+        }
+
+
+        [Fact]
+        public void Update_Throws_DuplicatedCodeExeption_if_new_Product_Code_already_exist()
+        {
+
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+
+            int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
+            var productforEdit = new ProductFactory()
+               .WithName("maste kaleh")
+               .WithCategoryId(categoryId)
+               .WithProductCode(3)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
+
+            var dto = new UpdateProductDtoBuilder()
+               .WithName("maste kaleh")
+               .WithCategoryName("labaniyat")
+               .WithProductCode(2)
+               .Build();
+
+            Action expected = () => _sut.Update(dto, 3);
+            expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
+
+            _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode &&
+            _.Name == product.Name).Should().BeTrue();
+
+        }
 
         //[Fact]
         //public void Delete_delete_category_properly()

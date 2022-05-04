@@ -21,7 +21,7 @@ using GroceryShop.TestTools.Products;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("ویرایش کالا")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
@@ -97,7 +97,7 @@ namespace GroceryShop.Specs.Categories
             
         }
 
-        [And("")]
+        [And("خطایی با عنوان 'کد جدید کالا تکراریست ' باید رخ دهد")]
         public void ThenAnd()
         {
             expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
