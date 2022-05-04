@@ -10,5 +10,8 @@ namespace GroceryShop.Services.Products.Contracts
     public interface ProductRepository
     {
         void Add(Product product);
+        bool isProductNameExist(string name);
+        bool isProductCodeExist(int code);
+
     }
 }

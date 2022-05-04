@@ -29,6 +29,19 @@ namespace GroceryShop.Services.Products
         public void Add(AddProductDto dto)
         {
 
+            bool isProductNameExist = _repository.isProductNameExist(dto.Name);
+            if (isProductNameExist)
+            {
+                throw new ProductNameIsDuplicatedExeption();
+            }
+
+            bool isProductCodeExist = _repository.isProductCodeExist(dto.ProductCode);
+            if (isProductCodeExist)
+            {
+                throw new ProductCodeIsDuplicatedExeption();
+            }
+
+
             var categoryId = _categoryRepository.FindByName(dto.CategoryName).Id;
 
             var product = new Product

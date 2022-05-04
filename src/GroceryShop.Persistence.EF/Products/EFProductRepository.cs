@@ -21,5 +21,33 @@ namespace GroceryShop.Persistence.EF.Products
         {
             _dataContext.Add(product);
         }
+
+        public bool isProductCodeExist(int code)
+        {
+            if (_dataContext.Products
+                .Any(Products => Products.ProductCode == code))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool isProductNameExist(string name)
+        {
+          if (_dataContext.Products
+                .Any(Products => Products.Name == name))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
     }
 }

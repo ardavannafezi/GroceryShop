@@ -12,7 +12,7 @@ namespace GroceryShop.TestTools.categories
             {
                 ProductCode = 1,
                 Name = "dummy",
-                CategoryId = 1,
+                CategoryName = "dummy",
                 MaxInStock = 5,
                 MinInStock = 1,
                 BuyPrice = 100,

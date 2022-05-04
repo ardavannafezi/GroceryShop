@@ -23,22 +23,16 @@ namespace GroceryShop.TestTools.Products
                 BuyPrice = 100,
                 SellPrice = 200,
                 Quantity = 4,
-
             };
-        }
-
-        public Product Build()
-        {
-            return product;
-        }
-        public ProductFactory WithName(string name)
-        {
-            product.Name = name;
-            return this;
         }
         public ProductFactory WithProductCode(int code)
         {
             product.ProductCode = code;
+            return this;
+        }
+        public ProductFactory WithName(string name)
+        {
+            product.Name = name;
             return this;
         }
         public ProductFactory WithCategoryId(int id)
@@ -46,11 +40,9 @@ namespace GroceryShop.TestTools.Products
             product.CategoryId = id;
             return this;
         }
-       
-      
-
-
-
-
+        public Product Build()
+        {
+            return product;
+        }
     }
 }

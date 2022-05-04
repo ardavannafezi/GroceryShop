@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.Categories
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
-    public class AddProduct: EFDataContextDatabaseFixture
+    public class AddProductWithDuplicatedName: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public AddProduct(ConfigurationFixture configuration) : base(configuration)
+        public AddProductWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,11 +48,18 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("هیچ کالایی در فهرست کالا وجود ندارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
         }
 
 

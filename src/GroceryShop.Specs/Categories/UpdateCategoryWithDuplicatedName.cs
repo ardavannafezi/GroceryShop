@@ -80,6 +80,7 @@ namespace GroceryShop.Specs.Categories
             expected.Should().ThrowExactly<TheCategoryNameAlreadyExist>();
         }
 
+
         [Fact]
         public void Run()
         {
