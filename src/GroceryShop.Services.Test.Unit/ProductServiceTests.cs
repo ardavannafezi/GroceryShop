@@ -137,8 +137,34 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
+        [Fact]
+        public void Update_updates_produvt_wih_given_informations()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            var dto = new UpdateProductDtoBuilder()
+               .WithName("maste kaleh")
+               .WithCategoryName("labaniyat")
+               .WithProductCode(2)
+               .Build();
+            _sut.Update(dto, 2);
+
+            var expected = _dataContext.Products.Any(_ => _.ProductCode == dto.ProductCode && _.Name == dto.Name);
+            expected.Should().BeTrue();
+
+        }
+
         //[Fact]
-        //public void Update_Throws_DuplicatedCategoryExeption_if_new_category_name_already_exist()
+        //public void Update_Throws_DuplicatedNameExeption_if_new_Product_name_already_exist()
         //{
         //    var category = CategoryFactory.CreateCategory("labaniyat");
         //    _dataContext.Manipulate(_ => _.Categories.Add(category));
@@ -149,7 +175,7 @@ namespace GroceryShop.Services.Test.Unit
         //    var categoryDto = CategoryFactory.UpdateCategoryDto("labaniyat");
 
         //    Action expected = () => _sut.Update(categoryDto, "perotoeny");
-        //    expected.Should().ThrowExactly <TheCategoryNameAlreadyExist> ();
+        //    expected.Should().ThrowExactly<TheCategoryNameAlreadyExist>();
 
         //    var expectedToBe = _dataContext.Categories
         //        .FirstOrDefault();
