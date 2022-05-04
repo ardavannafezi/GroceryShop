@@ -61,6 +61,12 @@ namespace GroceryShop.Services.Products
 
         public void Delete(int code)
         {
+            if (!_repository.isCodeAlreadyExist(code))
+            {
+                throw new ProductNotFoundExeption();
+            }
+           
+
             _repository.Delete(_repository.FindById(code));
             _unitOfWork.Commit();
         }

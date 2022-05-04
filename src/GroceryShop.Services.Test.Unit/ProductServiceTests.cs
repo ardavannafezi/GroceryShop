@@ -240,17 +240,29 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void Delete_delete_category_properly()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void Delete_delete_product_properly()
+        {
 
-        //    _sut.Delete(category.Name);
-        //    _unitOfWork.Commit();
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    _dataContext.Categories.FirstOrDefault(_ => _.Name == category.Name).Should().BeNull();
-        //}
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product)); 
+
+            _sut.Delete(product.ProductCode);
+            _unitOfWork.Commit();
+
+             _dataContext.Products.Any(_ =>
+                 _.ProductCode == product.ProductCode)
+                     .Should().BeFalse();
+            ;
+        }
 
         //[Fact]
         //public void Delete_Category_that_not_exist_should_throw_CategoryNotFoundExeption()

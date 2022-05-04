@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.Categories
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
-    public class DeleteProduct: EFDataContextDatabaseFixture
+    public class DeleteProductWithNotExistedCode: EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
+        public DeleteProductWithNotExistedCode(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,35 +48,23 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست کالا وجود دارد")]
+        [Given("کالایی با کد 2 در فهرست کالا وجود ندارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(2)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-
         }
 
 
         [When("کالای با کد '02'  را حذف می کنیم")]
         public void When()
         {
-            _sut.Delete(2);
+            expected = () => _sut.Delete(2);
         }
 
         [Then("هیچ کالایی در فهرست کالا ها با کد '02' وجود ندارد  ")]
         public void Then()
         {
-            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2);
-            expected.Should().BeFalse();
-            
+
+            expected.Should().ThrowExactly<ProductNotFoundExeption>();
         }
 
       
