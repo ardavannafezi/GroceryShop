@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.Categories
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
-    public class AddProductWithDuplicatedName: EFDataContextDatabaseFixture
+    public class AddProductWithDuplicatedProductCode : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -39,7 +39,7 @@ namespace GroceryShop.Specs.Categories
         private AddCategoryDto _dto;
         Action expected;
 
-        public AddProductWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
+        public AddProductWithDuplicatedProductCode(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -48,7 +48,7 @@ namespace GroceryShop.Specs.Categories
             _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست دسته بندی کالا وجود دارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -65,13 +65,13 @@ namespace GroceryShop.Specs.Categories
         }
 
 
-        [When("کالایی با عنوان 'ماست شیرازی' تعریف میکنم")]
+        [When("کالایی با عنوان 'ماست کاله' با کد 2 تعریف میکنم")]
         public void When()
         {
             var dto = new ProductDtoBuilder()
-               .WithName("maste shirazi")
+               .WithName("maste kaleh")
                .WithCategoryName("labaniyat")
-               .WithProductCode(3)
+               .WithProductCode(2)
                .Build();
 
             expected = () => _sut.Add(dto);
@@ -80,7 +80,7 @@ namespace GroceryShop.Specs.Categories
         [Then("تنها یک کالا با عنوان ' ماست شیرازی' باید در فهرست کالا وجود داشته باشد  ")]
         public void Then()
         {
-            var expected = _dataContext.Products.Count(_ => _.Name == "maste shirazi");
+            var expected = _dataContext.Products.Count(_ => _.ProductCode == 2);
             expected.Should().Be(1);
             
         }
@@ -89,7 +89,7 @@ namespace GroceryShop.Specs.Categories
         public void ThenAnd()
         {
 
-            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+            expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
         }
 
 

@@ -12,6 +12,7 @@ using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Products;
 using GroceryShop.Services.Products.Contracts;
 using GroceryShop.TestTools.categories;
+using GroceryShop.TestTools.Products;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -61,16 +62,29 @@ namespace GroceryShop.Services.Test.Unit
         [Fact]
         public void Add_throws_DuplicatedPRoductNameExeption_when_new_product_added_with_name_thatis_Already_exist()
         {
-            var category = new Category
-            {
-                Name = "dummy",
-            }; _dataContext.Manipulate(_ => _.Categories.Add(category));
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var dto = CategoryFactory.AddCategoryDto("dummy");
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+
+            var dto = new ProductDtoBuilder()
+               .WithName("maste shirazi")
+               .WithCategoryName("labaniyat")
+               .WithProductCode(3)
+               .Build();
 
             Action expected = () => _sut.Add(dto);
+            expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
 
-            expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
+            _dataContext.Products.Count(_ => _.Name == "maste shirazi").Should().Be(1);
+
         }
 
         //[Fact]
