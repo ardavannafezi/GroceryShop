@@ -58,5 +58,10 @@ namespace GroceryShop.Services.Products
             _repository.Add(product);
             _unitOfWork.Commit();
         }
+
+        public IList<GetProductDto> GetAll()
+        {
+                return _repository.GetAll();
+        }
     }
 }

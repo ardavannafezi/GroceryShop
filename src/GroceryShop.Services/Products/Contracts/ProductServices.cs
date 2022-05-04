@@ -10,5 +10,6 @@ namespace GroceryShop.Services.Products.Contracts
     public interface ProductServices
     {
         void Add(AddProductDto product);
+        IList<GetProductDto> GetAll();
     }
 }

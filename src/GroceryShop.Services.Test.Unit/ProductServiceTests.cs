@@ -115,19 +115,27 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void GetAll_gets_all_Existing_Categories()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void GetAll_gets_all_Existing_Products()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    var expected = _sut.GetAll();
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            var expected = _sut.GetAll();
 
 
-        //   expected.Should().HaveCount(1);
-        //    expected.Should().Contain(_ => _.Name == category.Name);
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.Name == "maste shirazi");
 
-        //}
+        }
 
         //[Fact]
         //public void Update_Throws_DuplicatedCategoryExeption_if_new_category_name_already_exist()

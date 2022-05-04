@@ -12,6 +12,6 @@ namespace GroceryShop.Services.Products.Contracts
         void Add(Product product);
         bool isProductNameExist(string name);
         bool isProductCodeExist(int code);
-
+        IList<GetProductDto> GetAll();
     }
 }

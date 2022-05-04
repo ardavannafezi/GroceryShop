@@ -64,7 +64,6 @@ namespace GroceryShop.Persistence.EF.Products
                    BuyPrice = x.BuyPrice,
                    SellPrice = x.SellPrice,
                    Quantity = x.Quantity,
-
                }).ToList();
         }
     }
