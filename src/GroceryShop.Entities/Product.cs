@@ -19,5 +19,7 @@ namespace GroceryShop.Entities
 
 
         public Category Category { get; set; }
+        public List<Import> Imports { get; set; }
+
     }
 }

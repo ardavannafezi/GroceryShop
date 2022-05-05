@@ -35,6 +35,11 @@ namespace GroceryShop.TestTools.Products
             product.Name = name;
             return this;
         }
+        public ProductFactory WithQuantity(int numbers)
+        {
+            product.Quantity = numbers;
+            return this;
+        }
         public ProductFactory WithCategoryId(int id)
         {
             product.CategoryId = id;

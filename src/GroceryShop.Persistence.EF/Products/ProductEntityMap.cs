@@ -31,6 +31,12 @@ namespace GroceryShop.Persistence.EF.Categories
             builder.Property(_ => _.BuyPrice);
 
 
+
+            builder.HasMany(_ => _.Imports)
+                .WithOne(_ => _.Product)
+                .HasForeignKey(_ => _.ProductCode)
+                .OnDelete(DeleteBehavior.ClientNoAction);
+
         }
     }
 }

@@ -19,7 +19,7 @@ namespace GroceryShop.Migrations
 
             var runner = CreateRunner(connectionString, options);
 
-            runner.MigrateUp(202203050426);
+            runner.MigrateUp(202205051129);
         }
 
         private static void CreateDatabase(string connectionString)
