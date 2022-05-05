@@ -47,7 +47,12 @@ namespace GroceryShop.TestTools.Products
         }
         public ProductFactory WithMaxInStock(int quantity)
         {
-            product.Quantity = quantity;
+            product.MaxInStock = quantity;
+            return this;
+        }
+        public ProductFactory WithMinInStock(int quantity)
+        {
+            product.MinInStock = quantity;
             return this;
         }
         public Product Build()

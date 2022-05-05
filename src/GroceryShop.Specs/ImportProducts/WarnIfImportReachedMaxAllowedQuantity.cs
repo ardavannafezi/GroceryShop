@@ -69,7 +69,7 @@ namespace GroceryShop.Specs.BuyProducts
                .WithCategoryId(categoryId)
                .WithProductCode(1)
                .WithQuantity(1)
-               .WithMaxInStock(10)
+               .WithMaxInStock(12)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
         }
@@ -91,11 +91,13 @@ namespace GroceryShop.Specs.BuyProducts
         public void Then()
         {
             expected.Should().ThrowExactly<ReachedMaximumAllowedInStockExeption>();
-
         }
      
-
-
+        [And("موجودی کالا بدون تغییر می باشد")]
+        public void ThenAnd()
+        {
+            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == 1).Quantity.Should().Be(1);
+        }
 
         [Fact]
         public void Run()

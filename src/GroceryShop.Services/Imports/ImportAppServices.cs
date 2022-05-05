@@ -47,16 +47,20 @@ namespace GroceryShop.Services.Imports
 
 
             int InStock = _productRepository.FindById(dto.ProductCode).Quantity;
-
             if (InStock + dto.Quantity > _productRepository
                 .GetMaxInStock(dto.ProductCode))
             {
                 throw new ReachedMaximumAllowedInStockExeption();
             }
 
+
+            Product product = _productRepository.FindById(dto.ProductCode);
+            product.Quantity = product.Quantity + dto.Quantity;
+            _productRepository.Update(product);
+
+
             var import = new Import
             { 
-   
                 ProductCode = dto.ProductCode,
                 Price = dto.Price,
                 Quantity = dto.Quantity ,
@@ -65,10 +69,7 @@ namespace GroceryShop.Services.Imports
             _repository.Add(import);
 
 
-            Product product = _productRepository.FindById(dto.ProductCode);
-            product.Quantity = product.Quantity + dto.Quantity;
-            _productRepository.Update(product);
-
+            
 
             _unitOfWork.Commit();
         }
