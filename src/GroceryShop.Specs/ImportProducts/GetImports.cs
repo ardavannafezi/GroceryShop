@@ -27,9 +27,9 @@ namespace GroceryShop.Specs.BuyProducts
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی تعریف کنم"
+      InOrderTo = "ورودی مشاهده کنم"
   )]
-    public class WarnIfImportReachedMaxAllowedQuantity : EFDataContextDatabaseFixture
+    public class GetImports : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -45,7 +45,7 @@ namespace GroceryShop.Specs.BuyProducts
         private Product _product;
         Action expected;
 
-        public WarnIfImportReachedMaxAllowedQuantity(ConfigurationFixture configuration) : base(configuration)
+        public GetImports(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -57,7 +57,7 @@ namespace GroceryShop.Specs.BuyProducts
         }
 
 
-        [Given(" کالایی با کد '01' و حداکثر موجودی 10 در فهرست کالا ها تعریف شده است ")]
+        [Given("کالایی با کد '01' و تعداد' 3'  وارد شده")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -68,36 +68,37 @@ namespace GroceryShop.Specs.BuyProducts
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(1)
-               .WithQuantity(1)
-               .WithMaxInStock(12)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            var import = new ImportBuilder()
+                .WithProductCode(1)
+                .WithQuantity(1)
+                .WithPrice(100)
+                .Build();
+            _dataContext.Manipulate(_ => _.Imports.Add(import));
+
         }
 
-        [When("ورودی کالای کد '01' را به تعداد '13' و قیمت 100 وارد می کنیم")]
+        [When("میخواهیم لیست تمامی ورودی ها را دریافت کنیم")]
         public void When()
         {
-            var dto = new ImportDtoBuilder()
-              .WithProductCode(1)
-              .WithQuantity(13)
-              .WithPrice(100)
-              .Build();
+            _sut.GetAll();
 
-            expected = () => _sut.Add(dto);;
 
         }
-
-        [Then(" خطای ' ورودی بیشتر از حد مجاز' رخ می دهد")]
         public void Then()
         {
-            expected.Should().ThrowExactly<ReachedMaximumAllowedInStockExeption>();
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.ProductCode == 1
+            && _.Quantity == 1 && _.Price == 100);
+            
+
         }
-     
-        [And("موجودی کالا بدون تغییر می باشد")]
-        public void ThenAnd()
-        {
-            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == 1).Quantity.Should().Be(1);
-        }
+
+
 
         [Fact]
         public void Run()
@@ -105,10 +106,7 @@ namespace GroceryShop.Specs.BuyProducts
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then()
-            , _ => ThenAnd()
-         
-            ) ;
+            , _ => Then()) ;
         }
     }
 }

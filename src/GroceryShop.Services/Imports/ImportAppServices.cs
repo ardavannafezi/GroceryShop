@@ -74,6 +74,9 @@ namespace GroceryShop.Services.Imports
             _unitOfWork.Commit();
         }
 
-      
+        public List<GetImportsDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
     }
 }

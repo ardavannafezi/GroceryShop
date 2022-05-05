@@ -118,33 +118,37 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void Add_throws_DuplicatedPRoductCodeExeption_when_new_product_added_with_ProductCode_thatis_Already_exist()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void Import_Warns_if_you_add_more_than_accepted_quantity_to_stocks()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-        //    var product = new ProductFactory()
-        //       .WithName("maste shirazi")
-        //       .WithCategoryId(categoryId)
-        //       .WithProductCode(2)
-        //       .Build();
-        //    _dataContext.Manipulate(_ => _.Products.Add(product));
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(1)
+               .WithQuantity(1)
+               .WithMaxInStock(12)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
 
 
-        //    var dto = new ProductDtoBuilder()
-        //      .WithName("maste kaleh")
-        //      .WithCategoryName("labaniyat")
-        //      .WithProductCode(2)
-        //      .Build();
+            var dto = new ImportDtoBuilder()
+              .WithProductCode(1)
+              .WithQuantity(13)
+              .WithPrice(100)
+              .Build();
 
-        //    Action expected = () => _sut.Add(dto);
-        //    expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
+            Action expected = () => _sut.Add(dto); ;
+            expected.Should().ThrowExactly<ReachedMaximumAllowedInStockExeption>();
 
-        //    _dataContext.Products.Count(_ => _.ProductCode == product.ProductCode).Should().Be(1);
+            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == product.ProductCode)
+                .Quantity.Should().Be(product.Quantity);
+        }
 
-        //}
+
 
         //[Fact]
         //public void GetAll_gets_all_Existing_Products()

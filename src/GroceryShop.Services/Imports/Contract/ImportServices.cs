@@ -11,6 +11,6 @@ namespace GroceryShop.Services.Products.Contracts
     public interface ImportServices
     {
         public void Add(AddImportDto dto);
-        
+        public List<GetImportsDto> GetAll();
     }
 }
