@@ -38,23 +38,38 @@ namespace GroceryShop.Services.Imports
 
         public void Add(AddImportDto dto)
         {
-            
-            //bool isProductCodeExist = _productRepository.isProductCodeExist(dto.ProductCode);
-            //if (isProductCodeExist)
-            //{
-            //    throw new ProductNotFoundExeption();
-            //}
-            
+
+            bool isProductCodeExist = _productRepository.isProductCodeExist(dto.ProductCode);
+            if (!isProductCodeExist)
+            {
+                throw new ProductNotFoundExeption();
+            }
+
+
+            int InStock = _productRepository.FindById(dto.ProductCode).Quantity;
+
+            if (InStock + dto.Quantity > _productRepository
+                .GetMaxInStock(dto.ProductCode))
+            {
+                throw new ReachedMaximumAllowedInStockExeption();
+            }
 
             var import = new Import
             { 
    
                 ProductCode = dto.ProductCode,
                 Price = dto.Price,
-                Quantity = dto.Quantity,
+                Quantity = dto.Quantity ,
             };
 
             _repository.Add(import);
+
+
+            Product product = _productRepository.FindById(dto.ProductCode);
+            product.Quantity = product.Quantity + dto.Quantity;
+            _productRepository.Update(product);
+
+
             _unitOfWork.Commit();
         }
 

@@ -18,11 +18,11 @@ namespace GroceryShop.TestTools.Products
                 ProductCode = 1,
                 Name = "dummy",
                 CategoryId = 1,
-                MaxInStock = 5,
+                MaxInStock = 15,
                 MinInStock = 1,
                 BuyPrice = 100,
                 SellPrice = 200,
-                Quantity = 4,
+                Quantity = 0,
             };
         }
         public ProductFactory WithProductCode(int code)
@@ -43,6 +43,11 @@ namespace GroceryShop.TestTools.Products
         public ProductFactory WithCategoryId(int id)
         {
             product.CategoryId = id;
+            return this;
+        }
+        public ProductFactory WithMaxInStock(int quantity)
+        {
+            product.Quantity = quantity;
             return this;
         }
         public Product Build()

@@ -56,6 +56,7 @@ namespace GroceryShop.Services.Test.Unit
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(1)
+               .WithQuantity(0)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
@@ -73,33 +74,49 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void Add_throws_DuplicatedPRoductNameExeption_when_new_product_added_with_name_thatis_Already_exist()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+        [Fact]
+        public void Import_increase_quantity_to_existed_numbers()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-        //    var product = new ProductFactory()
-        //       .WithName("maste shirazi")
-        //       .WithCategoryId(categoryId)
-        //       .WithProductCode(2)
-        //       .Build();
-        //    _dataContext.Manipulate(_ => _.Products.Add(product));
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(1)
+               .WithQuantity(3)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
 
 
-        //    var dto = new ProductDtoBuilder()
-        //       .WithName("maste shirazi")
-        //       .WithCategoryName("labaniyat")
-        //       .WithProductCode(3)
-        //       .Build();
+            var dto = new ImportDtoBuilder()
+              .WithProductCode(1)
+              .WithQuantity(5)
+              .WithPrice(100)
+              .Build();
 
-        //    Action expected = () => _sut.Add(dto);
-        //    expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+            _sut.Add(dto);
 
-        //    _dataContext.Products.Count(_ => _.Name == product.Name).Should().Be(1);
+            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == dto.ProductCode)
+                .Quantity.Should().Be(8);
 
-        //}
+        }
+
+        [Fact]
+        public void Import_throws_ProductNotFound_when_new_product_Imported_with_ProductId_that_doesnt_exist()
+        {
+
+            var dto = new ImportDtoBuilder()
+                .WithProductCode(1)
+                .WithQuantity(5)
+                .WithPrice(100)
+                .Build();
+
+            Action expected = () => _sut.Add(dto);
+            expected.Should().ThrowExactly<ProductNotFoundExeption>();
+
+        }
 
         //[Fact]
         //public void Add_throws_DuplicatedPRoductCodeExeption_when_new_product_added_with_ProductCode_thatis_Already_exist()

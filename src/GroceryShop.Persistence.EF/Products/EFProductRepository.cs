@@ -50,6 +50,19 @@ namespace GroceryShop.Persistence.EF.Products
             
         }
 
+        public int GetQuantity(int code)
+        {
+            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).Quantity;
+        }
+
+        public int GetMaxInStock(int code)
+        {
+            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).MaxInStock;
+        }
+        public int GetMinInStock(int code)
+        {
+            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).MinInStock;
+        }
 
         public IList<GetProductDto> GetAll()
         {
@@ -70,6 +83,10 @@ namespace GroceryShop.Persistence.EF.Products
         public Product FindById(int code)
         {
            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code);
+        }
+        public Product FindByName(string name)
+        {
+            return _dataContext.Products.FirstOrDefault(Products => Products.Name == name);
         }
 
         public void Update(Product product)
