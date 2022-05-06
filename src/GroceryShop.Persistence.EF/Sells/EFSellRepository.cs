@@ -34,5 +34,30 @@ namespace GroceryShop.Persistence.EF.Sells
                             Quantity = x.Quantity,
              }).ToList();
         }
+
+         public void Delete(int id)
+        {
+            _dataContext.Sells.Remove(GetById(id));
+        }
+
+
+        public Sell GetById(int id)
+        {
+            return _dataContext.Sells.FirstOrDefault(_ => _.Id == id);
+        }
+
+        public bool isExist(int id)
+        {
+            if (_dataContext.Sells.Any(_ => _.Id == id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        
     }
 }

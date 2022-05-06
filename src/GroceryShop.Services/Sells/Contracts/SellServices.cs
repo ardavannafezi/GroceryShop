@@ -1,6 +1,7 @@
 ﻿
 
 using GroceryShop.Services.Sells.Contract;
+using System.Collections.Generic;
 
 namespace GroceryShop.Services.Sells.Contracts
 {
@@ -8,5 +9,6 @@ namespace GroceryShop.Services.Sells.Contracts
     {
         void Add(AddSellDto dto);
         List<GetSellsDto> GetAll();
+        void Delete(int id);
     }
 }

@@ -73,7 +73,30 @@ namespace GroceryShop.Services.Imports
 
         }
 
+        
+        public void Delete(int id)
+        {
 
+            if (!_repository.isExist(id))
+            {
+                throw new SellNotFoundExeption();
+            };
+
+            Product product = _productRepository
+                .FindById(_repository.GetById(id).ProductCode);
+
+            product.Quantity = product.Quantity + _repository.GetById(id).Quantity;
+
+            _productRepository.Update(product);
+
+            _repository.Delete(id);
+            _unitOfWork.Commit();
+        }
+
+        public List<GetSellsDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
     }
 }
 

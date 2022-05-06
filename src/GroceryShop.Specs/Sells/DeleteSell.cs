@@ -15,6 +15,7 @@ using GroceryShop.Services.Sells.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
+using GroceryShop.TestTools.Sells;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace GroceryShop.Specs.SellProducts
       IWantTo = "ورودی کالا را مدیریت",
       InOrderTo = "ورودی تعریف کنم"
   )]
-    public class AddSellProduct : EFDataContextDatabaseFixture
+    public class DeleteSell : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -46,8 +47,9 @@ namespace GroceryShop.Specs.SellProducts
         private Category _category;
         private Product _product;
         Action expected;
+        Sell sell;
 
-        public AddSellProduct(ConfigurationFixture configuration) : base(configuration)
+        public DeleteSell(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -58,10 +60,10 @@ namespace GroceryShop.Specs.SellProducts
             _sut = new SellAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
         }
 
-
-        [Given("الایی با کد '01' در فهرست کالا ها تعریف شده است و  6 عدد موجود است")]
+        [Given("ورودی کالا با کد '01' در فهرست ورودی کالا ها موجود است")]
         public void Given()
         {
+
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
@@ -74,33 +76,38 @@ namespace GroceryShop.Specs.SellProducts
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
+            sell = new SellBuilder()
+                .WithProductCode(1)
+                .WithQuantity(1)
+                .Build();
+            _dataContext.Manipulate(_ => _.Sells.Add(sell));
+
         }
 
-        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+        [When("ورودی کالای کد '01' را حذف می کنیم")]
         public void When()
         {
-            var dto = new SellDtoBuilder()
-              .WithProductCode(1)
-              .WithQuantity(2)
-              .Build();
-
-            _sut.Add(dto);
-
+            _sut.Delete(sell.Id);
         }
-        [Then("فروش کالا در لیست فروش موجود است")]
+
+        [Then("ورودی کالای کد '01'وجود ندارد")]
 
         public void Then()
         {
-            _dataContext.Sells.Count(_ => _.ProductCode == 1 && _.Quantity == 2);
-
+            _dataContext.Imports.FirstOrDefault(_ => _.Id == sell.Id)
+                .Should().BeNull();
         }
 
-        [When("تعداد 4 کالا در لیست کالا ها باقی")]
+        [And(" تعداد 7عدد از کالا موجود می باشد")]
 
         public void ThenAnd()
         {
-            _productRepository.GetQuantity(1).Should().Be(4);
+            int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;
+            _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == productCode)
+                .Quantity.Should().Be(7);
         }
+
 
         [Fact]
         public void Run()
@@ -109,8 +116,8 @@ namespace GroceryShop.Specs.SellProducts
                 _ => Given()
             , _ => When()
             , _ => Then()
-            , _ => ThenAnd());
-
+            , _ => ThenAnd()
+            );
         }
     }
 }
