@@ -19,13 +19,13 @@ using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Products;
 using GroceryShop.TestTools.Products;
 
-namespace GroceryShop.Specs.Categories
+namespace GroceryShop.Specs.Products
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("مشاهده کالا")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   کالا را مدیریت کنم",
-        InOrderTo = "آنها را نمایش کنم"
+        InOrderTo = "آنها را مشاهدع کنم"
     )]
     public class GetProduct: EFDataContextDatabaseFixture
     {
@@ -38,7 +38,7 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
-
+        Product product;
         public GetProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
@@ -55,7 +55,7 @@ namespace GroceryShop.Specs.Categories
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
+            product = new ProductFactory()
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(2)
@@ -70,13 +70,13 @@ namespace GroceryShop.Specs.Categories
             _sut.GetAll();
         }
 
-        [Then("کالایی با عنوان 'ماست شیرازی' و کد 2 به ما نشان داده می شود")]
+        [Then("کالایی با عنوان 'ماست شیرازی' و کد 2 نشان داده می شود")]
         public void Then()
         {
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.Name == "maste shirazi");
+            expected.Should().Contain(_ => _.Name == product.Name);
 
         }
 

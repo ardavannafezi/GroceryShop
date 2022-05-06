@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.BuyProducts
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی مشاهده کنم"
+      InOrderTo = "ورودی ویرایش کنم"
   )]
     public class UpdateImport : EFDataContextDatabaseFixture
     {
@@ -81,7 +81,7 @@ namespace GroceryShop.Specs.BuyProducts
 
         }
 
-        [When("ورودی کالا با کد 1 را به تعداد 5  ویرایش می کنیم")]
+        [When("ورودی کالا با کد 1 را به تعداد 5  ویرایش می کنم")]
         public void When()
         {
 
@@ -94,11 +94,11 @@ namespace GroceryShop.Specs.BuyProducts
 
         }
 
-        [Then(" ورودی با کد کالای '01' و تعداد 1' و به ما داده می شود")]
+        [Then(" ورودی با کد کالای '01' و تعداد 1' و موجود میباشد")]
         public void Then()
         {
-            _dataContext.Imports.Any(_ => _.ProductCode == 1
-            && _.Quantity == 5 ).Should().BeTrue();
+            _dataContext.Imports.Count(_ => _.ProductCode == 1
+            && _.Quantity == 5 ).Should().Be(1);
         }
 
         [And(" تعداد 1عدد از کالا موجود می باشد")]

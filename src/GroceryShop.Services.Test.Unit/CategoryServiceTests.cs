@@ -104,7 +104,7 @@ namespace GroceryShop.Services.Test.Unit
             _sut.Delete(category.Name);
             _unitOfWork.Commit();
 
-            _dataContext.Categories.FirstOrDefault(_ => _.Name == category.Name).Should().BeNull();
+            _dataContext.Categories.Any(_ => _.Name == "labaniyat").Should().BeFalse();
         }
 
         [Fact]
@@ -112,6 +112,7 @@ namespace GroceryShop.Services.Test.Unit
         {
             string categoryName = "DoesNotExistDummy";
             Action expected = () => _sut.Delete(categoryName);
+
             expected.Should().ThrowExactly<CategoryNotFoundExeption>();
             _unitOfWork.Commit();    
         }

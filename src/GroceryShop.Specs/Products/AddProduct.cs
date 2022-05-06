@@ -19,9 +19,9 @@ using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Products;
 using GroceryShop.TestTools.Products;
 
-namespace GroceryShop.Specs.Categories
+namespace GroceryShop.Specs.Products
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("تعریف کالا")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",

@@ -19,12 +19,12 @@ using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Products;
 using GroceryShop.TestTools.Products;
 
-namespace GroceryShop.Specs.Categories
+namespace GroceryShop.Specs.Products
 {
     [Scenario("ویرایش کالا")]
     [Feature("",
         AsA = "فروشنده ",
-        IWantTo = "   دسته بندی کالا را مدیریت کنم",
+        IWantTo = " کالا را مدیریت کنم",
         InOrderTo = "آنها را ویرایش کنم"
     )]
     public class UpdateProduct: EFDataContextDatabaseFixture
@@ -38,6 +38,7 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
+        UpdateProductDto dto;
 
         public UpdateProduct(ConfigurationFixture configuration) : base(configuration)
         {
@@ -66,7 +67,7 @@ namespace GroceryShop.Specs.Categories
         [When("کالایی با کد 2 را به عنوان 'ماست کاله' ویرایش می کنیم")]
         public void When()
         {
-            var dto = new UpdateProductDtoBuilder()
+           dto = new UpdateProductDtoBuilder()
                .WithName("maste kaleh")
                .WithCategoryName("labaniyat")
                .WithProductCode(2)
@@ -78,7 +79,9 @@ namespace GroceryShop.Specs.Categories
         [Then("کالای کد 2 با عنوان 'ماست کاله' در فهرست کالا موجود می باشد")]
         public void Then()
         {
-            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2 && _.Name == "maste kaleh");
+            var expected = _dataContext.Products
+                .Any(_ => _.ProductCode == dto.ProductCode
+                    && _.Name == dto.Name);
             expected.Should().BeTrue();
             
         }

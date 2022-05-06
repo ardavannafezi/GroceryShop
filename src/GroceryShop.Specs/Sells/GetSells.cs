@@ -26,11 +26,11 @@ using static GroceryShop.Specs.BDDHelper;
 
 namespace GroceryShop.Specs.SellProducts
 {
-    [Scenario("تعریف ورودی کالا")]
+    [Scenario("مشاهده فروش کالا")]
     [Feature("",
       AsA = "فروشنده ",
-      IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی مشاهده کنم"
+      IWantTo = "فروش کالا را مدیریت",
+      InOrderTo = "فروش مشاهده کنم"
   )]
     public class GetSells : EFDataContextDatabaseFixture
     {

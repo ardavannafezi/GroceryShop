@@ -26,11 +26,11 @@ using static GroceryShop.Specs.BDDHelper;
 
 namespace GroceryShop.Specs.SellProducts
 {
-    [Scenario("تعریف ورودی کالا")]
+    [Scenario("حذف فروش کالا")]
     [Feature("",
       AsA = "فروشنده ",
-      IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی تعریف کنم"
+      IWantTo = "فروش کالا را مدیریت",
+      InOrderTo = "فروش حذف کنم"
   )]
     public class DeleteSell : EFDataContextDatabaseFixture
     {

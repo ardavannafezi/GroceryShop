@@ -10,5 +10,6 @@ namespace GroceryShop.Services.Sells.Contracts
         void Add(AddSellDto dto);
         List<GetSellsDto> GetAll();
         void Delete(int id);
+        void Update(UpdateSellDto dto, int id);
     }
 }

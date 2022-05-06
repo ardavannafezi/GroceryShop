@@ -44,6 +44,7 @@ namespace GroceryShop.Specs.BuyProducts
         private Category _category;
         private Product _product;
         Action expected;
+        Import import;
 
         public GetImports(ConfigurationFixture configuration) : base(configuration)
         {
@@ -57,7 +58,7 @@ namespace GroceryShop.Specs.BuyProducts
         }
 
 
-        [Given("کالایی با کد '01' و تعداد' 3'  وارد شده")]
+        [Given("کالایی با کد '01' و تعداد' 1' عدد  وارد شده")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -71,7 +72,7 @@ namespace GroceryShop.Specs.BuyProducts
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
-            var import = new ImportBuilder()
+             import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(1)
                 .Build();
@@ -92,8 +93,8 @@ namespace GroceryShop.Specs.BuyProducts
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.ProductCode == 1
-            && _.Quantity == 1 );
+            expected.Should().Contain(_ => _.ProductCode == import.ProductCode
+            && _.Quantity == import.Quantity );
         }
 
 

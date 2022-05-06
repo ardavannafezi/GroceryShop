@@ -59,7 +59,7 @@ namespace GroceryShop.Specs.BuyProducts
         }
 
 
-        [Given("ورودی کالا با کد '01' در فهرست ورودی کالا ها موجود است")]
+        [Given("ورودی کالا با کد '01' و1 عدد از 1 کالا در فهرست ورودی کالا ها موجود است")]
         public void Given()
         {
 
@@ -83,7 +83,7 @@ namespace GroceryShop.Specs.BuyProducts
             
         }
 
-        [When("ورودی کالای کد '01' را حذف می کنیم")]
+        [When("ورودی کالای کد '01' را حذف می کنم")]
         public void When()
         {
             _sut.Delete(import.Id);
@@ -95,7 +95,7 @@ namespace GroceryShop.Specs.BuyProducts
                 .Should().BeNull();
         }
 
-        [And(" تعداد 1عدد از کالا موجود می باشد")]
+        [And(" هیچ کالا یی موجود نمی باشد")]
 
         public void ThenAnd()
         {

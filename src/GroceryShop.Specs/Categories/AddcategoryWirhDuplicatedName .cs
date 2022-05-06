@@ -65,8 +65,7 @@ namespace GroceryShop.Specs.Categories
         public void Then()
         {
 
-            var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().Be(CategoryFactory.CreateCategory("labaniyat").Name);
+            _dataContext.Categories.Count(Categories => Categories.Name == "labaniyat").Should().Be(1);
 
         }
 

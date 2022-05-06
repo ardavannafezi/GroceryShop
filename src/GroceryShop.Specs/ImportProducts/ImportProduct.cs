@@ -9,6 +9,7 @@ using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
+using GroceryShop.Services.Imports.Contract;
 using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
@@ -44,6 +45,7 @@ namespace GroceryShop.Specs.BuyProducts
         private Category _category;
         private Product _product;
         Action expected;
+        AddImportDto dto;
 
         public ImportProduct(ConfigurationFixture configuration) : base(configuration)
         {
@@ -72,10 +74,10 @@ namespace GroceryShop.Specs.BuyProducts
             _dataContext.Manipulate(_ => _.Products.Add(product));
         }
 
-        [When("ورودی کالای کد '01' را به تعداد '5' و قیمت 100 وارد می کنیم")]
+        [When("ورودی کالای کد '01' را به تعداد '5'  وارد می کنم")]
         public void When()
         {
-            var dto = new ImportDtoBuilder()
+            dto = new ImportDtoBuilder()
               .WithProductCode(1)
               .WithQuantity(5)
               .Build();
@@ -83,10 +85,12 @@ namespace GroceryShop.Specs.BuyProducts
             _sut.Add(dto);
 
         }
+
+        [When("ورودی کالای کد '01' را به تعداد '5'موجود می باشد")]
         public void Then()
         {
-           _dataContext.Imports.Count(_ => _.ProductCode == 1)
-                .Should().Be(1);
+           _dataContext.Imports.Any(_ => _.ProductCode == dto.ProductCode 
+                && _.Quantity == dto.Quantity).Should().BeTrue();
 
         }
 

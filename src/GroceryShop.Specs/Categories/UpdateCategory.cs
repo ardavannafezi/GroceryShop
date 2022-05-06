@@ -34,7 +34,9 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
-
+        Category category;
+        UpdateCategoryDto dto;
+     
         public UpdateCategory(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
@@ -47,7 +49,7 @@ namespace GroceryShop.Specs.Categories
         [Given("دسته بندی با عنوان 'لبنیات'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
+            category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
         }
 
@@ -55,17 +57,18 @@ namespace GroceryShop.Specs.Categories
         [When("دسته بندی با عنوان 'لبنیات' را به 'پروتئینی' ویرایش میکنم")]
         public void When()
         {
-           var categoryDto = CategoryFactory.UpdateCategoryDto("Protoeny");
+           dto = CategoryFactory.UpdateCategoryDto("Protoeny");
 
-           _sut.Update(categoryDto, "labaniyat");
+           _sut.Update(dto, "labaniyat");
         }
+
 
         [Then("دسته بندی با عنوان 'پروتئین' در فهرست دسته بندی کالا باید وجود داشته باشد ")]
         public void Then()
         {
 
             var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().Be(CategoryFactory.CreateCategory("Protoeny").Name);
+            expected.Name.Should().Be(dto.Name);
 
         }
 

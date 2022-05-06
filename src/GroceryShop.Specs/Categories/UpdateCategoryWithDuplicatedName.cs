@@ -34,7 +34,7 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
-
+        UpdateCategoryDto dto;
         public UpdateCategoryWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
@@ -61,9 +61,9 @@ namespace GroceryShop.Specs.Categories
         [When("دسته بندی با عنوان 'پروتئینی'  را به 'لبنیات' ویرایش میکنیم")]
         public void When()
         {
-           var categoryDto = CategoryFactory.UpdateCategoryDto("Protoeny");
+            dto = CategoryFactory.UpdateCategoryDto("Protoeny");
 
-           expected = () => _sut.Update(categoryDto, "labaniyat");
+           expected = () => _sut.Update(dto, "labaniyat");
         }
 
         [Then("تنها یک دسته بندی با عنوان ' لبنیات' باید در فهرست دسته بندی کالا وجود داشته  ")]
@@ -71,7 +71,7 @@ namespace GroceryShop.Specs.Categories
         {
 
             var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().Be(CategoryFactory.CreateCategory("labaniyat").Name);
+            expected.Name.Should().NotBe(dto.Name);
 
         }
         [And("عنوان 'عنوان جدید دسته بندی کالای تکراریست ' باید رخ دهد.")]

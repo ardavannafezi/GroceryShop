@@ -19,13 +19,13 @@ using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Products;
 using GroceryShop.TestTools.Products;
 
-namespace GroceryShop.Specs.Categories
+namespace GroceryShop.Specs.Products
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("حذف کالا")]
     [Feature("",
         AsA = "فروشنده ",
-        IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را تعریف کنم"
+        IWantTo = "    کالا را مدیریت کنم",
+        InOrderTo = "آنها را حذف کنم"
     )]
     public class DeleteProduct: EFDataContextDatabaseFixture
     {
@@ -38,7 +38,7 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
-
+        Product product;
         public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
@@ -55,7 +55,7 @@ namespace GroceryShop.Specs.Categories
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
+            product = new ProductFactory()
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(2)
@@ -74,7 +74,8 @@ namespace GroceryShop.Specs.Categories
         [Then("هیچ کالایی در فهرست کالا ها با کد '02' وجود ندارد  ")]
         public void Then()
         {
-            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2);
+            var expected = _dataContext.Products
+                .Any(_ => _.ProductCode == product.ProductCode);
             expected.Should().BeFalse();
             
         }

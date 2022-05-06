@@ -21,7 +21,7 @@ namespace GroceryShop.Specs.Categories
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
-        InOrderTo = "آنها را تعریف کنم"
+        InOrderTo = "آنها را حذف کنم"
     )]
     public class DeleteCategory: EFDataContextDatabaseFixture
     {
@@ -58,11 +58,10 @@ namespace GroceryShop.Specs.Categories
            _sut.Delete("labaniyat");
         }
 
-        [Then("دسته بندی با عنوان 'پروتئین' در فهرست دسته بندی کالا باید وجود داشته باشد ")]
+        [Then("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی کالا نیست ")]
         public void Then()
         {
-            var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().NotBe(CategoryFactory.CreateCategory("Protoeny").Name);
+            _dataContext.Categories.Any(_ => _.Name == "labaniyat").Should().BeFalse();
         }
 
         [Fact]

@@ -19,12 +19,12 @@ using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Services.Products;
 using GroceryShop.TestTools.Products;
 
-namespace GroceryShop.Specs.Categories
+namespace GroceryShop.Specs.Products
 {
     [Scenario("ویرایش کالا")]
     [Feature("",
         AsA = "فروشنده ",
-        IWantTo = "   دسته بندی کالا را مدیریت کنم",
+        IWantTo = " کالا را مدیریت کنم",
         InOrderTo = "آنها را ویرایش کنم"
     )]
     public class UpdateProductWithDuplicatedName: EFDataContextDatabaseFixture
@@ -38,6 +38,7 @@ namespace GroceryShop.Specs.Categories
         private Category _category;
         private AddCategoryDto _dto;
         Action expected;
+        Product product;
 
         public UpdateProductWithDuplicatedName(ConfigurationFixture configuration) : base(configuration)
         {
@@ -55,7 +56,7 @@ namespace GroceryShop.Specs.Categories
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
+            product = new ProductFactory()
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(2)
@@ -92,7 +93,9 @@ namespace GroceryShop.Specs.Categories
         [Then("تنها کالای 02 با عنوان 'ماست شیرازی' باید در کالا وجود داشته باشد")]
         public void Then()
         {
-            var expected = _dataContext.Products.Any(_ => _.ProductCode == 2 && _.Name == "maste shirazi");
+            var expected = _dataContext.Products
+                .Any(_ => _.ProductCode == product.ProductCode
+                    && _.Name == product.Name);
             expected.Should().BeTrue();
             
         }

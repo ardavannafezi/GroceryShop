@@ -53,6 +53,7 @@ namespace GroceryShop.Services.Categories
             }
 
             _repository.Delete(name);
+            _unitOfWork.Commit();
         }
 
         public IList<GetCategoryDto> GetAll()

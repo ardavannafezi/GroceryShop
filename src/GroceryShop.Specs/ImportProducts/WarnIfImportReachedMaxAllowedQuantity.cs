@@ -27,7 +27,7 @@ namespace GroceryShop.Specs.BuyProducts
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی تعریف کنم"
+      InOrderTo = "ورودی ویرایش کنم"
   )]
     public class WarnIfImportReachedMaxAllowedQuantity : EFDataContextDatabaseFixture
     {
@@ -74,7 +74,7 @@ namespace GroceryShop.Specs.BuyProducts
             _dataContext.Manipulate(_ => _.Products.Add(product));
         }
 
-        [When("ورودی کالای کد '01' را به تعداد '13' و قیمت 100 وارد می کنیم")]
+        [When("ورودی کالای کد '01' را به تعداد '13' و قیمت 100 وارد می کنم")]
         public void When()
         {
             var dto = new ImportDtoBuilder()
