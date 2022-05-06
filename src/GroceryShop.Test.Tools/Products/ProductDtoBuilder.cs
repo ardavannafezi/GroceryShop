@@ -57,21 +57,25 @@ namespace GroceryShop.TestTools.categories
                 Quantity = 4,
             };
         }
+
         public UpdateProductDtoBuilder WithProductCode(int code)
         {
             productDto.ProductCode = code;
             return this;
         }
+
         public UpdateProductDtoBuilder WithName(string name)
         {
             productDto.Name = name;
             return this;
         }
+
         public UpdateProductDtoBuilder WithSellPrice(double price)
         {
             productDto.SellPrice = price;
             return this;
         }
+
          public UpdateProductDtoBuilder WithBuyPrice(double price)
         {
             productDto.BuyPrice = price;
@@ -83,6 +87,7 @@ namespace GroceryShop.TestTools.categories
             productDto.CategoryName = name;
             return this;
         }
+
         public UpdateProductDto Build()
         {
             return productDto;

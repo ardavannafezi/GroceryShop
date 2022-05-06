@@ -5,7 +5,6 @@ using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
-using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Persistence.EF.Sells;
 using GroceryShop.Services.Categories.Contracts;
@@ -17,10 +16,7 @@ using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using GroceryShop.TestTools.Sells;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
@@ -91,7 +87,6 @@ namespace GroceryShop.Specs.SellProducts
         }
 
         [Then("ورودی کالای کد '01'وجود ندارد")]
-
         public void Then()
         {
             _dataContext.Imports.FirstOrDefault(_ => _.Id == sell.Id)
@@ -99,7 +94,6 @@ namespace GroceryShop.Specs.SellProducts
         }
 
         [And(" تعداد 7عدد از کالا موجود می باشد")]
-
         public void ThenAnd()
         {
             int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;

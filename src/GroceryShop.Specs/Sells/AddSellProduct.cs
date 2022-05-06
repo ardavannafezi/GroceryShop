@@ -5,7 +5,6 @@ using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
-using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Persistence.EF.Sells;
 using GroceryShop.Services.Categories.Contracts;
@@ -16,10 +15,7 @@ using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
@@ -87,16 +83,15 @@ namespace GroceryShop.Specs.SellProducts
             _sut.Add(dto);
 
         }
-        [Then("فروش کالا در لیست فروش موجود است")]
 
+        [Then("فروش کالا در لیست فروش موجود است")]
         public void Then()
         {
             _dataContext.Sells.Count(_ => _.ProductCode == 1 && _.Quantity == 2);
 
         }
 
-        [When("تعداد 4 کالا در لیست کالا ها باقی")]
-
+        [And("تعداد 4 کالا در لیست کالا ها باقی")]
         public void ThenAnd()
         {
             _productRepository.GetQuantity(1).Should().Be(4);

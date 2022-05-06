@@ -14,10 +14,6 @@ using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
@@ -96,8 +92,6 @@ namespace GroceryShop.Specs.BuyProducts
             expected.Should().Contain(_ => _.ProductCode == import.ProductCode
             && _.Quantity == import.Quantity );
         }
-
-
 
         [Fact]
         public void Run()

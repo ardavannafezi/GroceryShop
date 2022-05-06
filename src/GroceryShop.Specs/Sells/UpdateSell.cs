@@ -5,7 +5,6 @@ using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
-using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Persistence.EF.Sells;
 using GroceryShop.Services.Categories.Contracts;
@@ -17,10 +16,7 @@ using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using GroceryShop.TestTools.Sells;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
