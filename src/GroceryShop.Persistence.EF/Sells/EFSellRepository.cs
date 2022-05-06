@@ -58,6 +58,9 @@ namespace GroceryShop.Persistence.EF.Sells
             }
         }
 
-        
+        public void Update(Sell sell)
+        {
+            _dataContext.Update(sell);
+        }
     }
 }

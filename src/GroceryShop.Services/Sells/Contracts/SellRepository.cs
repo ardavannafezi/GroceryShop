@@ -16,5 +16,6 @@ namespace GroceryShop.Services.Sells.Contracts
         bool isExist(int id);
         public void Delete(int id);
         Sell GetById(int id);
+        void Update(Sell sell);
     }
 }
