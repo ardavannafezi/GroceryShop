@@ -62,5 +62,17 @@ namespace GroceryShop.Persistence.EF.Sells
         {
             _dataContext.Update(sell);
         }
+
+        public List<Sell> GetByProduct(int id)
+        {
+            return _dataContext.Sells
+                .Where(x => x.ProductCode == id)
+                       .Select(x => new Sell
+                       {
+                           ProductCode = x.ProductCode,
+                           Id = x.Id,
+                           Quantity = x.Quantity,
+                       }).ToList();
+        }
     }
 }

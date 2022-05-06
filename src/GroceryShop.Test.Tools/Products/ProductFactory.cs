@@ -40,6 +40,16 @@ namespace GroceryShop.TestTools.Products
             product.Quantity = numbers;
             return this;
         }
+        public ProductFactory WithBuyPrice(double price)
+        {
+            product.BuyPrice = price;
+            return this;
+        }
+        public ProductFactory WithSellPrice(double price)
+        {
+            product.SellPrice = price;
+            return this;
+        }
         public ProductFactory WithCategoryId(int id)
         {
             product.CategoryId = id;

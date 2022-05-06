@@ -67,6 +67,17 @@ namespace GroceryShop.TestTools.categories
             productDto.Name = name;
             return this;
         }
+        public UpdateProductDtoBuilder WithSellPrice(double price)
+        {
+            productDto.SellPrice = price;
+            return this;
+        }
+         public UpdateProductDtoBuilder WithBuyPrice(double price)
+        {
+            productDto.BuyPrice = price;
+            return this;
+        }
+        
         public UpdateProductDtoBuilder WithCategoryName(string name)
         {
             productDto.CategoryName = name;

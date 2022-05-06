@@ -16,5 +16,6 @@ namespace GroceryShop.Services.Products.Contracts
         bool isExist(int id);
         void Delete(int id);
         void Update(Import import);
+        List<Import> GetByProduct(int Productid);
     }
 }

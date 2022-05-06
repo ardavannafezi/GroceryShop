@@ -45,6 +45,18 @@ namespace GroceryShop.Persistence.EF.Imports
             return _dataContext.Imports.FirstOrDefault(_ => _.Id == id);
         }
 
+        public List<Import> GetByProduct(int Productid)
+        {
+            return _dataContext.Imports
+                .Where(_ => _.ProductCode == Productid)
+                      .Select(x => new Import
+                      {
+                          ProductCode = x.ProductCode,
+                          Id = x.Id,
+                          Quantity = x.Quantity,
+                      }).ToList();
+        }
+
         public bool isExist(int id)
         {
             if (_dataContext.Imports.Any(_ => _.Id == id))

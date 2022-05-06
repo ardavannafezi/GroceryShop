@@ -52,16 +52,22 @@ namespace GroceryShop.Persistence.EF.Products
 
         public int GetQuantity(int code)
         {
-            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).Quantity;
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == code)
+                .Quantity;
         }
 
         public int GetMaxInStock(int code)
         {
-            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).MaxInStock;
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == code)
+                .MaxInStock;
         }
         public int GetMinInStock(int code)
         {
-            return _dataContext.Products.FirstOrDefault(Products => Products.ProductCode == code).MinInStock;
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == code)
+                .MinInStock;
         }
 
         public IList<GetProductDto> GetAll()
@@ -125,6 +131,23 @@ namespace GroceryShop.Persistence.EF.Products
         public void Delete(Product product)
         {
             _dataContext.Remove(product);
+        }
+
+        public List<Product> GetByCategoryId(int categoryId)
+        {
+            return _dataContext.Products
+               .Where(_ => _.CategoryId == categoryId)
+               .Select(x => new Product
+               {
+                   ProductCode = x.ProductCode,
+                   Name = x.Name,
+                   CategoryId = x.CategoryId,
+                   MaxInStock = x.MaxInStock,
+                   MinInStock = x.MinInStock,
+                   BuyPrice = x.BuyPrice,
+                   SellPrice = x.SellPrice,
+                   Quantity = x.Quantity,
+               }).ToList();
         }
     }
 }

@@ -23,5 +23,6 @@ namespace GroceryShop.Services.Products.Contracts
         int GetQuantity(int code);
         int GetMinInStock(int code);
         int GetMaxInStock(int code);
+        List<Product> GetByCategoryId(int categoryId);
     }
 }

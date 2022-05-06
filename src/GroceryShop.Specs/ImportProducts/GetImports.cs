@@ -58,27 +58,27 @@ namespace GroceryShop.Specs.BuyProducts
         }
 
 
-        [Given("کالایی با کد '01' و تعداد' 1' عدد  وارد شده")]
-        public void Given()
-        {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
+            [Given("کالایی با کد '01' و تعداد' 1' عدد  وارد شده")]
+            public void Given()
+            {
+                var category = CategoryFactory.CreateCategory("labaniyat");
+                _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(1)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
+                int categoryId = _categoryRepository.FindByName(category.Name).Id;
+                var product = new ProductFactory()
+                   .WithName("maste shirazi")
+                   .WithCategoryId(categoryId)
+                   .WithProductCode(1)
+                   .Build();
+                _dataContext.Manipulate(_ => _.Products.Add(product));
 
-             import = new ImportBuilder()
-                .WithProductCode(1)
-                .WithQuantity(1)
-                .Build();
-            _dataContext.Manipulate(_ => _.Imports.Add(import));
+                 import = new ImportBuilder()
+                    .WithProductCode(1)
+                    .WithQuantity(1)
+                    .Build();
+                _dataContext.Manipulate(_ => _.Imports.Add(import));
 
-        }
+            }
 
         [When("میخواهیم لیست تمامی ورودی ها را دریافت کنیم")]
         public void When()

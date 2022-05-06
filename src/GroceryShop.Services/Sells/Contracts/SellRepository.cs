@@ -17,5 +17,6 @@ namespace GroceryShop.Services.Sells.Contracts
         public void Delete(int id);
         Sell GetById(int id);
         void Update(Sell sell);
+        List<Sell> GetByProduct(int id);
     }
 }
