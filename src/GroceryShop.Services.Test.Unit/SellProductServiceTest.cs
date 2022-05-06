@@ -180,11 +180,60 @@ namespace GroceryShop.Services.Test.Unit
 
 
         [Fact]
-        public void Delete_throw_ImportNotFoundExeption_exeption_when_sell_doesnt_exist()
+        public void Delete_throw_SellNotFoundExeption_exeption_when_sell_doesnt_exist()
         {
             Action expected = () => _sut.Delete(2);
             expected.Should().ThrowExactly<SellNotFoundExeption>();
         }
 
+        [Fact]
+        public void Update_updates_Sell_properly_and_correcting_existed_products_quantity()
+        {
+
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(1)
+               .WithQuantity(6)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            Sell sell = new SellBuilder()
+                .WithProductCode(1)
+                .WithQuantity(1)
+                .Build();
+            _dataContext.Manipulate(_ => _.Sells.Add(sell));
+
+            var dto = new UpdatSellDtoBuilder()
+               .WithProductCode(1)
+               .WithQuantity(5)
+               .Build();
+
+            _sut.Update(dto, sell.Id);
+
+           _dataContext.Sells.Any(_ => _.ProductCode == 1
+                && _.Quantity == 5).Should().BeTrue();
+
+            int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;
+            _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == productCode)
+                .Quantity.Should().Be(2);
+        }
+
+        [Fact]
+        public void Update_throw_SellNotFoundExeption_exeption_when_sell_doesnt_exist()
+        {
+            var dto = new UpdatSellDtoBuilder()
+           .WithProductCode(1)
+           .WithQuantity(5)
+           .Build();
+
+            Action expected = () => _sut.Update(dto,2);
+            expected.Should().ThrowExactly<SellNotFoundExeption>();
+        }
     }
 }
