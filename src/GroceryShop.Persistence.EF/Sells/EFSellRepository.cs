@@ -1,4 +1,5 @@
 ﻿using GroceryShop.Entities;
+using GroceryShop.Services.Sells.Contract;
 using GroceryShop.Services.Sells.Contracts;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,17 @@ namespace GroceryShop.Persistence.EF.Sells
         public void Add(Sell sell)
         {
           _dataContext.Sells.Add(sell);
+        }
+
+        public List<GetSellsDto> GetAll()
+        {
+            return _dataContext.Sells
+                        .Select(x => new GetSellsDto
+                        {
+                            ProductCode = x.ProductCode,
+                            Id = x.Id,
+                            Quantity = x.Quantity,
+             }).ToList();
         }
     }
 }

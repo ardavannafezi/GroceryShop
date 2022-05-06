@@ -10,16 +10,6 @@ namespace GroceryShop.Services.Imports
         {
         }
 
-        public ReachedMinimumInStockAlert(string message) : base(message)
-        {
-        }
-
-        public ReachedMinimumInStockAlert(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected ReachedMinimumInStockAlert(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+       
     }
 }

@@ -49,11 +49,10 @@ namespace GroceryShop.Services.Imports
 
             Product product = _productRepository.FindById(dto.ProductCode);
 
-            if(product.Quantity < dto.Quantity)
-            {
+            if(product.Quantity < dto.Quantity) { 
+
                 throw new NotEcoughtInStock();
             }
-
             product.Quantity = product.Quantity - dto.Quantity;
             _productRepository.Update(product);
 

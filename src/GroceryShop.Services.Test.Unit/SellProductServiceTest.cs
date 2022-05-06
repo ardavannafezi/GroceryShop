@@ -17,6 +17,7 @@ using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Services.Sells.Contracts;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
+using GroceryShop.TestTools.Sells;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -116,63 +117,34 @@ namespace GroceryShop.Services.Test.Unit
 
         }
 
-        //[Fact]
-        //public void Import_Warns_if_you_add_more_than_accepted_quantity_to_stocks()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-        //    var product = new ProductFactory()
-        //       .WithName("maste shirazi")
-        //       .WithCategoryId(categoryId)
-        //       .WithProductCode(1)
-        //       .WithQuantity(1)
-        //       .WithMaxInStock(12)
-        //       .Build();
-        //    _dataContext.Manipulate(_ => _.Products.Add(product));
+        [Fact]
+        public void GetAll_gets_all_Existing_Sells()
+        {
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(1)
+               .WithQuantity(6)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
 
-        //    var dto = new ImportDtoBuilder()
-        //      .WithProductCode(1)
-        //      .WithQuantity(13)
-        //      .Build();
+            Sell sell = new SellBuilder()
+                .WithProductCode(1)
+                .WithQuantity(3)
+                .Build();
+            _dataContext.Manipulate(_ => _.Sells.Add(sell));
 
-        //    Action expected = () => _sut.Add(dto); ;
-        //    expected.Should().ThrowExactly<ReachedMaximumAllowedInStockExeption>();
+            var expected = _sut.GetAll();
 
-        //    _dataContext.Products.FirstOrDefault(_ => _.ProductCode == product.ProductCode)
-        //        .Quantity.Should().Be(product.Quantity);
-        //}
-
-
-
-        //[Fact]
-        //public void GetAll_gets_all_Existing_Imports()
-        //{
-        //    var category = CategoryFactory.CreateCategory("labaniyat");
-        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-        //    var product = new ProductFactory()
-        //       .WithName("maste shirazi")
-        //       .WithCategoryId(categoryId)
-        //       .WithProductCode(1)
-        //       .Build();
-        //    _dataContext.Manipulate(_ => _.Products.Add(product));
-
-        //    var import = new ImportBuilder()
-        //        .WithProductCode(1)
-        //        .WithQuantity(1)
-        //        .Build();
-        //    _dataContext.Manipulate(_ => _.Imports.Add(import));
-
-        //    var expected = _sut.GetAll();
-
-        //    expected.Should().HaveCount(1);
-        //    expected.Should().Contain(_ => _.ProductCode == import.ProductCode
-        //    && _.Quantity == import.Quantity );
-        //}
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.ProductCode == sell.ProductCode
+            && _.Quantity == sell.Quantity);
+        }
 
 
         //[Fact]

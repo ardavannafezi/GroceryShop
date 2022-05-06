@@ -7,12 +7,15 @@ using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
+using GroceryShop.Persistence.EF.Sells;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
 using GroceryShop.Services.Products.Contracts;
+using GroceryShop.Services.Sells.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
+using GroceryShop.TestTools.Sells;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +24,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
-namespace GroceryShop.Specs.BuyProducts
+namespace GroceryShop.Specs.SellProducts
 {
     [Scenario("تعریف ورودی کالا")]
     [Feature("",
@@ -29,35 +32,36 @@ namespace GroceryShop.Specs.BuyProducts
       IWantTo = "ورودی کالا را مدیریت",
       InOrderTo = "ورودی مشاهده کنم"
   )]
-    public class GetImports : EFDataContextDatabaseFixture
+    public class GetSells : EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
         private readonly ProductServices _productSut;
-        private readonly ImportServices _sut;
+        private readonly SellServices _sut;
 
         private readonly ProductRepository _productRepository;
-        private readonly ImportRepository _repository;
+        private readonly SellRepository _repository;
 
         private readonly UnitOfWork _unitOfWork;
         private readonly CategoryRepository _categoryRepository;
         private Category _category;
         private Product _product;
         Action expected;
+        Sell sell;
 
-        public GetImports(ConfigurationFixture configuration) : base(configuration)
+        public GetSells(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
-            _repository = new EFImportRepository(_dataContext);
+            _repository = new EFSellRepository(_dataContext);
             _categoryRepository = new EFCategoryRepository(_dataContext);
             _productRepository = new EFProductRepository(_dataContext);
 
-            _sut = new ImportAppServices(_repository, _unitOfWork, _categoryRepository , _productRepository);
+            _sut = new SellAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
         }
 
 
-        [Given("کالایی با کد '01' و تعداد' 3'  وارد شده")]
+
+        [Given("کالایی با کد '01' و تعداد' 3'  فروش رفته شده")]
         public void Given()
         {
             var category = CategoryFactory.CreateCategory("labaniyat");
@@ -68,14 +72,15 @@ namespace GroceryShop.Specs.BuyProducts
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(1)
+               .WithQuantity(6)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
-            var import = new ImportBuilder()
+            sell = new SellBuilder()
                 .WithProductCode(1)
-                .WithQuantity(1)
+                .WithQuantity(3)
                 .Build();
-            _dataContext.Manipulate(_ => _.Imports.Add(import));
+            _dataContext.Manipulate(_ => _.Sells.Add(sell));
 
         }
 
@@ -83,7 +88,6 @@ namespace GroceryShop.Specs.BuyProducts
         public void When()
         {
             _sut.GetAll();
-
         }
 
         [Then(" ورودی با کد کالای '01' و تعداد 1' و به ما داده می شود")]
@@ -92,8 +96,8 @@ namespace GroceryShop.Specs.BuyProducts
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.ProductCode == 1
-            && _.Quantity == 1 );
+            expected.Should().Contain(_ => _.ProductCode == sell.ProductCode
+            && _.Quantity == sell.Quantity );
         }
 
 

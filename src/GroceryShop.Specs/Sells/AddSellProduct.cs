@@ -87,7 +87,7 @@ namespace GroceryShop.Specs.SellProducts
             _sut.Add(dto);
 
         }
-        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+        [Then("فروش کالا در لیست فروش موجود است")]
 
         public void Then()
         {
@@ -95,14 +95,12 @@ namespace GroceryShop.Specs.SellProducts
 
         }
 
-        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+        [When("تعداد 4 کالا در لیست کالا ها باقی")]
 
         public void ThenAnd()
         {
             _productRepository.GetQuantity(1).Should().Be(4);
         }
-
-
 
         [Fact]
         public void Run()
