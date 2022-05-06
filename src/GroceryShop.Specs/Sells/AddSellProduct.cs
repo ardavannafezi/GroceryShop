@@ -87,10 +87,19 @@ namespace GroceryShop.Specs.SellProducts
             _sut.Add(dto);
 
         }
+        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+
         public void Then()
         {
           _dataContext.Sells.Count(_ => _.ProductCode == 1 && _.Quantity == 2);
 
+        }
+
+        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+
+        public void ThenAnd()
+        {
+            _productRepository.GetQuantity(1).Should().Be(4);
         }
 
 
@@ -101,7 +110,9 @@ namespace GroceryShop.Specs.SellProducts
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then()) ;
+            , _ => Then()
+            , _ => ThenAnd());
+      
         }
     }
 }

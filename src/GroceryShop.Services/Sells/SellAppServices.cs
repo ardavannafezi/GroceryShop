@@ -47,6 +47,17 @@ namespace GroceryShop.Services.Imports
                 throw new ProductNotFoundExeption();
             }
 
+            Product product = _productRepository.FindById(dto.ProductCode);
+
+            if(product.Quantity < dto.Quantity)
+            {
+                throw new NotEcoughtInStock();
+            }
+
+            product.Quantity = product.Quantity - dto.Quantity;
+            _productRepository.Update(product);
+
+
             var sell = new Sell
             {
                 ProductCode = dto.ProductCode,
@@ -54,6 +65,13 @@ namespace GroceryShop.Services.Imports
             };
             _repository.Add(sell);
             _unitOfWork.Commit();
+
+            if (product.Quantity <= _productRepository
+                .GetMaxInStock(dto.ProductCode))
+            {
+                new ReachedMinimumInStockAlert();
+            }
+
         }
 
 
