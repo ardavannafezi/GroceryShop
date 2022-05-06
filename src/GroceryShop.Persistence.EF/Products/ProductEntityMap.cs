@@ -37,6 +37,11 @@ namespace GroceryShop.Persistence.EF.Categories
                 .HasForeignKey(_ => _.ProductCode)
                 .OnDelete(DeleteBehavior.ClientNoAction);
 
+            builder.HasMany(_ => _.Sells)
+            .WithOne(_ => _.Product)
+            .HasForeignKey(_ => _.ProductCode)
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
         }
     }
 }
