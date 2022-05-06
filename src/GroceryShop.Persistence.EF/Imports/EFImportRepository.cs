@@ -36,7 +36,6 @@ namespace GroceryShop.Persistence.EF.Imports
                      {
                          ProductCode = x.ProductCode,
                          Id = x.Id,
-                         Price = x.Price,
                          Quantity = x.Quantity,
                      }).ToList();
         }

@@ -71,30 +71,39 @@ namespace GroceryShop.Specs.BuyProducts
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
                .WithProductCode(1)
+               .WithQuantity(1)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
             import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(1)
-                .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
             
         }
 
-        [When("ورودی کالای کد '01' را به تعداد '5' و قیمت 100 وارد می کنیم")]
+        [When("ورودی کالای کد '01' را حذف می کنیم")]
         public void When()
         {
             _sut.Delete(import.Id);
         }
+
         public void Then()
         {
             _dataContext.Imports.FirstOrDefault(_ => _.Id == import.Id)
                 .Should().BeNull();
         }
 
+        [And(" تعداد 1عدد از کالا موجود می باشد")]
 
+        public void ThenAnd()
+        {
+            int productCode = _productRepository.FindById(import.ProductCode).ProductCode;
+            _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == productCode)
+                .Quantity.Should().Be(0);
+        }
 
 
         [Fact]
@@ -103,7 +112,9 @@ namespace GroceryShop.Specs.BuyProducts
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then()) ;
+            , _ => Then()
+            , _ => ThenAnd()
+            );
         }
     }
 }

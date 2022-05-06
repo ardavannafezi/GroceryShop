@@ -62,7 +62,6 @@ namespace GroceryShop.Services.Imports
             var import = new Import
             { 
                 ProductCode = dto.ProductCode,
-                Price = dto.Price,
                 Quantity = dto.Quantity ,
             };
 
@@ -77,12 +76,22 @@ namespace GroceryShop.Services.Imports
         public void Delete(int id)
         {
 
-            if (_repository.GetById(id)== null)
+            if (!_repository.isExist(id))
             {
                 throw new ImportNotFoundExeption();
-            }
-           var import =  _repository.GetById(id);
+            };
+
+            Product product = _productRepository
+                .FindById(_repository.GetById(id).ProductCode);
+
+            product.Quantity = product.Quantity - _repository.GetById(id).Quantity;
+                
+                
+            _productRepository.Update(product);
+
+            var import =  _repository.GetById(id);
             _repository.Delete(id);
+            _unitOfWork.Commit();
         }
 
         public List<GetImportsDto> GetAll()
@@ -92,18 +101,27 @@ namespace GroceryShop.Services.Imports
 
         public void Update(UpdateImportDto dto, int id)
         {
+            if (!_repository.isExist(id))
+            {
+                throw new ImportNotFoundExeption();
+            };
 
-           
+            Product product = _productRepository
+               .FindById(_repository.GetById(id).ProductCode);
+
+            product.Quantity = product.Quantity 
+                - _repository.GetById(id).Quantity + dto.Quantity;
+
+            _productRepository.Update(product);
+
 
             Import import = _repository.GetById(id);
 
             import.ProductCode = dto.ProductCode;
-            import.Price = dto.Price;
             import.Quantity = dto.Quantity;
 
             _repository.Update(import);
             _unitOfWork.Commit();
-
 
         }
     }

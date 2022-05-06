@@ -11,9 +11,7 @@ namespace GroceryShop.TestTools.categories
         {
             import = new Import
             {
-                Id = 1,
                 ProductCode = 1,
-                Price = 100,
                 Quantity = 4,
             };
         }
@@ -27,11 +25,7 @@ namespace GroceryShop.TestTools.categories
             import.Quantity = quantity;
             return this;
         }
-        public ImportBuilder WithPrice(double price)
-        {
-            import.Price = price;
-            return this;
-        }
+        
         public Import Build()
         {
             return import;

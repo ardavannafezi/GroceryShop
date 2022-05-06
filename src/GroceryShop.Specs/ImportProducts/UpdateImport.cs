@@ -44,6 +44,7 @@ namespace GroceryShop.Specs.BuyProducts
         private Category _category;
         private Product _product;
         Action expected;
+        private Import import;
 
         public UpdateImport(ConfigurationFixture configuration) : base(configuration)
         {
@@ -67,14 +68,14 @@ namespace GroceryShop.Specs.BuyProducts
             var product = new ProductFactory()
                .WithName("maste shirazi")
                .WithCategoryId(categoryId)
+               .WithQuantity(8)
                .WithProductCode(1)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
-            var import = new ImportBuilder()
+            import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(3)
-                .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
 
@@ -87,10 +88,9 @@ namespace GroceryShop.Specs.BuyProducts
             var dto = new UpdateImportDtoBuilder()
                 .WithProductCode(1)
                 .WithQuantity(5)
-                .WithPrice(100)
                 .Build();
 
-            _sut.Update(dto ,1);
+            _sut.Update(dto ,import.Id);
 
         }
 
@@ -101,10 +101,17 @@ namespace GroceryShop.Specs.BuyProducts
 
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.ProductCode == 1
-            && _.Quantity == 1 && _.Price == 100);
+            && _.Quantity == 5 );
         }
 
-
+        [And(" تعداد 1عدد از کالا موجود می باشد")]
+        public void ThenAnd()
+        {
+            int productCode = _productRepository.FindById(import.ProductCode).ProductCode;
+            _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == productCode)
+                .Quantity.Should().Be(10);
+        }
 
         [Fact]
         public void Run()
@@ -112,7 +119,8 @@ namespace GroceryShop.Specs.BuyProducts
             Runner.RunScenario(
                 _ => Given()
             , _ => When()
-            , _ => Then()) ;
+            , _ => Then()
+            , _ => ThenAnd()) ;
         }
     }
 }

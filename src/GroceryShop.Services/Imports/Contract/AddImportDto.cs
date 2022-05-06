@@ -10,6 +10,5 @@ namespace GroceryShop.Services.Imports.Contract
     {
         public int ProductCode { get; set; }
         public int Quantity { get; set; }
-        public Double Price { get; set; }
     }
 }

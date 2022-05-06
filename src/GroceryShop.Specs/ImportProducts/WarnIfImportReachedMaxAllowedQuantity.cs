@@ -80,7 +80,6 @@ namespace GroceryShop.Specs.BuyProducts
             var dto = new ImportDtoBuilder()
               .WithProductCode(1)
               .WithQuantity(13)
-              .WithPrice(100)
               .Build();
 
             expected = () => _sut.Add(dto);;

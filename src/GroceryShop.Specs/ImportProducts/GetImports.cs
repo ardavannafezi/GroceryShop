@@ -74,7 +74,6 @@ namespace GroceryShop.Specs.BuyProducts
             var import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(1)
-                .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
 
@@ -95,7 +94,7 @@ namespace GroceryShop.Specs.BuyProducts
 
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.ProductCode == 1
-            && _.Quantity == 1 && _.Price == 100);
+            && _.Quantity == 1 );
         }
 
 

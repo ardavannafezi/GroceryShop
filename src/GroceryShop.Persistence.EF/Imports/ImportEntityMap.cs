@@ -24,7 +24,6 @@ namespace GroceryShop.Persistence.EF.Categories
 
             builder.Property(_ => _.ProductCode);
 
-            builder.Property(_ => _.Price);
 
         }
     }

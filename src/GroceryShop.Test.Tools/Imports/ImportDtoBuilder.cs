@@ -12,7 +12,6 @@ namespace GroceryShop.TestTools.categories
             importDto = new AddImportDto
             {
                 ProductCode = 1,
-                Price = 100,
                 Quantity = 4,
             };
         }
@@ -26,11 +25,7 @@ namespace GroceryShop.TestTools.categories
             importDto.Quantity = quantity;
             return this;
         }
-        public ImportDtoBuilder WithPrice(double price)
-        {
-            importDto.Price = price;
-            return this;
-        }
+     
         public AddImportDto Build()
         {
             return importDto;
@@ -44,7 +39,6 @@ namespace GroceryShop.TestTools.categories
             importDto = new UpdateImportDto
             {
                 ProductCode = 1,
-                Price = 100,
                 Quantity = 4,
             };
         }
@@ -58,11 +52,7 @@ namespace GroceryShop.TestTools.categories
             importDto.Quantity = quantity;
             return this;
         }
-        public UpdateImportDtoBuilder WithPrice(double price)
-        {
-            importDto.Price = price;
-            return this;
-        }
+     
         public UpdateImportDto Build()
         {
             return importDto;

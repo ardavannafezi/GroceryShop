@@ -64,7 +64,6 @@ namespace GroceryShop.Services.Test.Unit
             var dto = new ImportDtoBuilder()
               .WithProductCode(1)
               .WithQuantity(5)
-              .WithPrice(100)
               .Build();
 
             _sut.Add(dto);
@@ -93,7 +92,6 @@ namespace GroceryShop.Services.Test.Unit
             var dto = new ImportDtoBuilder()
               .WithProductCode(1)
               .WithQuantity(5)
-              .WithPrice(100)
               .Build();
 
             _sut.Add(dto);
@@ -110,7 +108,6 @@ namespace GroceryShop.Services.Test.Unit
             var dto = new ImportDtoBuilder()
                 .WithProductCode(1)
                 .WithQuantity(5)
-                .WithPrice(100)
                 .Build();
 
             Action expected = () => _sut.Add(dto);
@@ -138,7 +135,6 @@ namespace GroceryShop.Services.Test.Unit
             var dto = new ImportDtoBuilder()
               .WithProductCode(1)
               .WithQuantity(13)
-              .WithPrice(100)
               .Build();
 
             Action expected = () => _sut.Add(dto); ;
@@ -167,7 +163,6 @@ namespace GroceryShop.Services.Test.Unit
             var import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(1)
-                .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
 
@@ -175,7 +170,7 @@ namespace GroceryShop.Services.Test.Unit
 
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.ProductCode == import.ProductCode
-            && _.Quantity == import.Quantity && _.Price == import.Price);
+            && _.Quantity == import.Quantity );
         }
 
 
@@ -300,7 +295,6 @@ namespace GroceryShop.Services.Test.Unit
             var import = new ImportBuilder()
               .WithQuantity(categoryId)
               .WithProductCode(1)
-              .WithPrice(1)
               .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
 
