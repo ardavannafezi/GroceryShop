@@ -31,6 +31,8 @@ namespace GroceryShop.Migrations
                             .WithColumn("Price").AsDouble().NotNullable()
                             .WithColumn("Quantity").AsInt32().NotNullable();
 
+
+
         }
 
     }

@@ -29,7 +29,7 @@ namespace GroceryShop.Specs.BuyProducts
       IWantTo = "ورودی کالا را مدیریت",
       InOrderTo = "ورودی مشاهده کنم"
   )]
-    public class GetImports : EFDataContextDatabaseFixture
+    public class UpdateImport : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -45,7 +45,7 @@ namespace GroceryShop.Specs.BuyProducts
         private Product _product;
         Action expected;
 
-        public GetImports(ConfigurationFixture configuration) : base(configuration)
+        public UpdateImport(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -73,18 +73,24 @@ namespace GroceryShop.Specs.BuyProducts
 
             var import = new ImportBuilder()
                 .WithProductCode(1)
-                .WithQuantity(1)
+                .WithQuantity(3)
                 .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
 
         }
 
-        [When("میخواهیم لیست تمامی ورودی ها را دریافت کنیم")]
+        [When("ورودی کالا با کد 1 را به تعداد 5  ویرایش می کنیم")]
         public void When()
         {
-            _sut.GetAll();
-            var info = _sut.GetAll();
+
+            var dto = new UpdateImportDtoBuilder()
+                .WithProductCode(1)
+                .WithQuantity(5)
+                .WithPrice(100)
+                .Build();
+
+            _sut.Update(dto ,1);
 
         }
 

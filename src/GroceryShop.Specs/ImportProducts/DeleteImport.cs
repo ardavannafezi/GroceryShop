@@ -27,9 +27,9 @@ namespace GroceryShop.Specs.BuyProducts
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "ورودی کالا را مدیریت",
-      InOrderTo = "ورودی مشاهده کنم"
+      InOrderTo = "ورودی حذف کنم"
   )]
-    public class GetImports : EFDataContextDatabaseFixture
+    public class DeleteImport : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
@@ -43,9 +43,11 @@ namespace GroceryShop.Specs.BuyProducts
         private readonly CategoryRepository _categoryRepository;
         private Category _category;
         private Product _product;
+        private Import import;
+        
         Action expected;
 
-        public GetImports(ConfigurationFixture configuration) : base(configuration)
+        public DeleteImport(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -57,9 +59,10 @@ namespace GroceryShop.Specs.BuyProducts
         }
 
 
-        [Given("کالایی با کد '01' و تعداد' 3'  وارد شده")]
+        [Given("ورودی کالا با کد '01' در فهرست ورودی کالا ها موجود است")]
         public void Given()
         {
+
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
@@ -71,32 +74,26 @@ namespace GroceryShop.Specs.BuyProducts
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
-            var import = new ImportBuilder()
+            import = new ImportBuilder()
                 .WithProductCode(1)
                 .WithQuantity(1)
                 .WithPrice(100)
                 .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
-
+            
         }
 
-        [When("میخواهیم لیست تمامی ورودی ها را دریافت کنیم")]
+        [When("ورودی کالای کد '01' را به تعداد '5' و قیمت 100 وارد می کنیم")]
         public void When()
         {
-            _sut.GetAll();
-            var info = _sut.GetAll();
-
+            _sut.Delete(import.Id);
         }
-
-        [Then(" ورودی با کد کالای '01' و تعداد 1' و به ما داده می شود")]
         public void Then()
         {
-            var expected = _sut.GetAll();
-
-            expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.ProductCode == 1
-            && _.Quantity == 1 && _.Price == 100);
+            _dataContext.Imports.FirstOrDefault(_ => _.Id == import.Id)
+                .Should().BeNull();
         }
+
 
 
 

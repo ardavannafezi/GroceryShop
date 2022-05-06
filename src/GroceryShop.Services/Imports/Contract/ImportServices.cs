@@ -12,5 +12,7 @@ namespace GroceryShop.Services.Products.Contracts
     {
         public void Add(AddImportDto dto);
         public List<GetImportsDto> GetAll();
+        void Delete(int id);
+        void Update(UpdateImportDto dto, int id);
     }
 }

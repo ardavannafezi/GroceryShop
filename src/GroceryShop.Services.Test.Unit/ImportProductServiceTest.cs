@@ -177,143 +177,149 @@ namespace GroceryShop.Services.Test.Unit
             expected.Should().Contain(_ => _.ProductCode == import.ProductCode
             && _.Quantity == import.Quantity && _.Price == import.Price);
         }
-          
-
-            //[Fact]
-            //public void Update_updates_produvt_wih_given_informations()
-            //{
-            //    var category = CategoryFactory.CreateCategory("labaniyat");
-            //    _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            //    var product = new ProductFactory()
-            //       .WithName("maste shirazi")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(2)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(product));
-
-            //    var dto = new UpdateProductDtoBuilder()
-            //       .WithName("maste kaleh")
-            //       .WithCategoryName("labaniyat")
-            //       .WithProductCode(2)
-            //       .Build();
-            //    _sut.Update(dto, 2);
-
-            //    var expected = _dataContext.Products.Any(_ => _.ProductCode == dto.ProductCode && _.Name == dto.Name);
-            //    expected.Should().BeTrue();
-
-            //}
-
-            //[Fact]
-            //public void Update_Throws_DuplicatedNameExeption_if_new_Product_name_already_exist()
-            //{
-
-            //    var category = CategoryFactory.CreateCategory("labaniyat");
-            //    _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            //    var product = new ProductFactory()
-            //       .WithName("maste shirazi")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(2)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(product));
 
 
-            //    int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
-            //    var productforEdit = new ProductFactory()
-            //       .WithName("maste kaleh")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(3)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
+        //[Fact]
+        //public void Update_updates_produvt_wih_given_informations()
+        //{
+        //    var category = CategoryFactory.CreateCategory("labaniyat");
+        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            //    var dto = new UpdateProductDtoBuilder()
-            //       .WithName("maste shirazi")
-            //       .WithCategoryName("labaniyat")
-            //       .WithProductCode(3)
-            //       .Build();
+        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
+        //    var product = new ProductFactory()
+        //       .WithName("maste shirazi")
+        //       .WithCategoryId(categoryId)
+        //       .WithProductCode(2)
+        //       .Build();
+        //    _dataContext.Manipulate(_ => _.Products.Add(product));
 
-            //    Action expected = () => _sut.Update(dto, 3);
-            //    expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+        //    var dto = new UpdateProductDtoBuilder()
+        //       .WithName("maste kaleh")
+        //       .WithCategoryName("labaniyat")
+        //       .WithProductCode(2)
+        //       .Build();
+        //    _sut.Update(dto, 2);
 
-            //    _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode && 
-            //    _.Name == product.Name).Should().BeTrue();
+        //    var expected = _dataContext.Products.Any(_ => _.ProductCode == dto.ProductCode && _.Name == dto.Name);
+        //    expected.Should().BeTrue();
 
-            //}
+        //}
 
+        //[Fact]
+        //public void Update_Throws_DuplicatedNameExeption_if_new_Product_name_already_exist()
+        //{
 
-            //[Fact]
-            //public void Update_Throws_DuplicatedCodeExeption_if_new_Product_Code_already_exist()
-            //{
+        //    var category = CategoryFactory.CreateCategory("labaniyat");
+        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            //    var category = CategoryFactory.CreateCategory("labaniyat");
-            //    _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            //    var product = new ProductFactory()
-            //       .WithName("maste shirazi")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(2)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(product));
-
-
-            //    int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
-            //    var productforEdit = new ProductFactory()
-            //       .WithName("maste kaleh")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(3)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
-
-            //    var dto = new UpdateProductDtoBuilder()
-            //       .WithName("maste kaleh")
-            //       .WithCategoryName("labaniyat")
-            //       .WithProductCode(2)
-            //       .Build();
-
-            //    Action expected = () => _sut.Update(dto, 3);
-            //    expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
-
-            //    _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode &&
-            //    _.Name == product.Name).Should().BeTrue();
-
-            //}
-
-            //[Fact]
-            //public void Delete_delete_product_properly()
-            //{
-
-            //    var category = CategoryFactory.CreateCategory("labaniyat");
-            //    _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            //    var product = new ProductFactory()
-            //       .WithName("maste shirazi")
-            //       .WithCategoryId(categoryId)
-            //       .WithProductCode(2)
-            //       .Build();
-            //    _dataContext.Manipulate(_ => _.Products.Add(product)); 
-
-            //    _sut.Delete(product.ProductCode);
-            //    _unitOfWork.Commit();
-
-            //     _dataContext.Products.Any(_ =>
-            //         _.ProductCode == product.ProductCode)
-            //             .Should().BeFalse();
-            //    ;
-            //}
+        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
+        //    var product = new ProductFactory()
+        //       .WithName("maste shirazi")
+        //       .WithCategoryId(categoryId)
+        //       .WithProductCode(2)
+        //       .Build();
+        //    _dataContext.Manipulate(_ => _.Products.Add(product));
 
 
-            //[Fact]
-            //public void Delete_throw_ProductNotFound_exeption_when_code_doesnt_exist()
-            //{
+        //    int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
+        //    var productforEdit = new ProductFactory()
+        //       .WithName("maste kaleh")
+        //       .WithCategoryId(categoryId)
+        //       .WithProductCode(3)
+        //       .Build();
+        //    _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
 
-            //    Action expected = () => _sut.Delete(2);
-            //    expected.Should().ThrowExactly<ProductNotFoundExeption>();          
-            //}
+        //    var dto = new UpdateProductDtoBuilder()
+        //       .WithName("maste shirazi")
+        //       .WithCategoryName("labaniyat")
+        //       .WithProductCode(3)
+        //       .Build();
+
+        //    Action expected = () => _sut.Update(dto, 3);
+        //    expected.Should().ThrowExactly<ProductNameIsDuplicatedExeption>();
+
+        //    _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode && 
+        //    _.Name == product.Name).Should().BeTrue();
+
+        //}
+
+
+        //[Fact]
+        //public void Update_Throws_DuplicatedCodeExeption_if_new_Product_Code_already_exist()
+        //{
+
+        //    var category = CategoryFactory.CreateCategory("labaniyat");
+        //    _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+        //    int categoryId = _categoryRepository.FindByName(category.Name).Id;
+        //    var product = new ProductFactory()
+        //       .WithName("maste shirazi")
+        //       .WithCategoryId(categoryId)
+        //       .WithProductCode(2)
+        //       .Build();
+        //    _dataContext.Manipulate(_ => _.Products.Add(product));
+
+
+        //    int categoryIdforedit = _categoryRepository.FindByName("labaniyat").Id;
+        //    var productforEdit = new ProductFactory()
+        //       .WithName("maste kaleh")
+        //       .WithCategoryId(categoryId)
+        //       .WithProductCode(3)
+        //       .Build();
+        //    _dataContext.Manipulate(_ => _.Products.Add(productforEdit));
+
+        //    var dto = new UpdateProductDtoBuilder()
+        //       .WithName("maste kaleh")
+        //       .WithCategoryName("labaniyat")
+        //       .WithProductCode(2)
+        //       .Build();
+
+        //    Action expected = () => _sut.Update(dto, 3);
+        //    expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
+
+        //    _dataContext.Products.Any(_ => _.ProductCode == product.ProductCode &&
+        //    _.Name == product.Name).Should().BeTrue();
+
+        //}
+
+        [Fact]
+        public void Delete_delete_import_from_list_properly()
+        {
+
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(1)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            var import = new ImportBuilder()
+              .WithQuantity(categoryId)
+              .WithProductCode(1)
+              .WithPrice(1)
+              .Build();
+            _dataContext.Manipulate(_ => _.Imports.Add(import));
+
+            _sut.Delete(1);
+
+            _unitOfWork.Commit();
+
+            _dataContext.Imports.FirstOrDefault(_ => _.Id == import.Id)
+              .Should().BeNull();
 
         }
+
+
+        [Fact]
+        public void Delete_throw_ImportNotFoundExeption_exeption_when_import_doesnt_exist()
+        {
+            Action expected = () => _sut.Delete(2);
+            expected.Should().ThrowExactly<ImportNotFoundExeption>();
+        }
+
+    }
 }

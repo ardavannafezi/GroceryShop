@@ -11,6 +11,7 @@ namespace GroceryShop.Persistence.EF.Imports
 {
     public class EFImportRepository :ImportRepository
     {
+        
         private readonly EFDataContext _dataContext;
 
         public EFImportRepository(EFDataContext dataContext)
@@ -23,6 +24,11 @@ namespace GroceryShop.Persistence.EF.Imports
             _dataContext.Add(import);
         }
 
+        public void Delete(int id)
+        {
+            _dataContext.Imports.Remove(GetById(id));
+        }
+
         public List<GetImportsDto> GetAll()
         {
             return _dataContext.Imports
@@ -33,6 +39,28 @@ namespace GroceryShop.Persistence.EF.Imports
                          Price = x.Price,
                          Quantity = x.Quantity,
                      }).ToList();
+        }
+
+        public Import GetById(int id)
+        {
+            return _dataContext.Imports.FirstOrDefault(_ => _.Id == id);
+        }
+
+        public bool isExist(int id)
+        {
+            if (_dataContext.Imports.Any(_ => _.Id == id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Update(Import import)
+        {
+            _dataContext.Update(import);
         }
     }
 }

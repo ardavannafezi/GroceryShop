@@ -11,6 +11,7 @@ namespace GroceryShop.TestTools.categories
         {
             import = new Import
             {
+                Id = 1,
                 ProductCode = 1,
                 Price = 100,
                 Quantity = 4,

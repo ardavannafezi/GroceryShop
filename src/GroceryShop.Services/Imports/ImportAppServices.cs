@@ -74,9 +74,37 @@ namespace GroceryShop.Services.Imports
             _unitOfWork.Commit();
         }
 
+        public void Delete(int id)
+        {
+
+            if (_repository.GetById(id)== null)
+            {
+                throw new ImportNotFoundExeption();
+            }
+           var import =  _repository.GetById(id);
+            _repository.Delete(id);
+        }
+
         public List<GetImportsDto> GetAll()
         {
             return _repository.GetAll();
+        }
+
+        public void Update(UpdateImportDto dto, int id)
+        {
+
+           
+
+            Import import = _repository.GetById(id);
+
+            import.ProductCode = dto.ProductCode;
+            import.Price = dto.Price;
+            import.Quantity = dto.Quantity;
+
+            _repository.Update(import);
+            _unitOfWork.Commit();
+
+
         }
     }
 }
