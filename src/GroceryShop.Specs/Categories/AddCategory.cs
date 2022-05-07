@@ -54,7 +54,7 @@ namespace GroceryShop.Specs.Categories
             CategoryRepository _categoryRepository = new EFCategoryRepository(_dataContext);
             CategoryServices _sut = new CategoryAppService(_categoryRepository,
                 _unitOfWork,
-                _categoryRepository);
+                _productrepository);
 
             _sut.Add(_dto);
         }

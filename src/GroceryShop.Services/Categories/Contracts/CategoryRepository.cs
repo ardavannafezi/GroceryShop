@@ -16,5 +16,6 @@ namespace GroceryShop.Services.Categories.Contracts
         Category FindByName(string name);
         bool IsCategoryExist(string name);
         void Delete(string name);
+        bool isHavingProduct(int categoryId);
     }
 }

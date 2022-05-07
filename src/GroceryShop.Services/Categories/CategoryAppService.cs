@@ -2,6 +2,7 @@
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Books.Contracts;
 using GroceryShop.Services.Categories.Contracts;
+using GroceryShop.Services.Products.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,16 @@ namespace GroceryShop.Services.Categories
         public CategoryAppService(
             CategoryRepository repositoy,
             UnitOfWork unitOfWork,
-            CategoryRepository cateogryRepository)
+            CategoryRepository categoryRepository)
         {
             _unitOfWork = unitOfWork;
             _repository = repositoy;
-            _categoryRepository = cateogryRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public void Add(AddCategoryDto dto)
         {
-            var isCategoryExist = _categoryRepository
+            var isCategoryExist = _repository
                 .IsCategoryExistById(dto.Name);
 
             if (isCategoryExist)
@@ -50,6 +51,14 @@ namespace GroceryShop.Services.Categories
             if (isCategoryAlreadyExist == false)
             {
                 throw new CategoryNotFoundExeption();
+            }
+
+            int categoryId = _repository.FindByName(name).Id;
+            
+            bool isProductExistInCategory = _repository.isHavingProduct(categoryId);
+            if (isProductExistInCategory)
+            {
+                throw new CategoryHasExistingProduct();
             }
 
             _repository.Delete(name);

@@ -9,6 +9,7 @@ using GroceryShop.Services.Books.Contracts;
 using GroceryShop.Services.Categories;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.TestTools.categories;
+using GroceryShop.TestTools.Products;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -114,7 +115,30 @@ namespace GroceryShop.Services.Test.Unit
             Action expected = () => _sut.Delete(categoryName);
 
             expected.Should().ThrowExactly<CategoryNotFoundExeption>();
-            _unitOfWork.Commit();    
+        }
+
+        [Fact]
+        public void Delete_ThrowCategoryHAsExistedProductExeprtion_when_aProduct_already_exist_in_category()
+        {
+
+            var category = CategoryFactory.CreateCategory("labaniyat");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+            var product = new ProductFactory()
+               .WithName("maste shirazi")
+               .WithCategoryId(categoryId)
+               .WithProductCode(2)
+               .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+
+            Action expected = () => _sut.Delete(category.Name);
+
+            expected.Should().ThrowExactly<CategoryHasExistingProduct>();
+
+
+
         }
     }
+
 }

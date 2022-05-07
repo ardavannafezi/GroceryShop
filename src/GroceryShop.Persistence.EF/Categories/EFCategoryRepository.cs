@@ -43,6 +43,8 @@ namespace GroceryShop.Persistence.EF.Categories
                }).ToList();
         }
 
+    
+
         public bool IsCategoryExist(string name)
         {
             if (_dataContext.Categories.Any(x => x.Name == name))
@@ -58,6 +60,11 @@ namespace GroceryShop.Persistence.EF.Categories
         public bool IsCategoryExistById(string name)
         {
             return _dataContext.Categories.Any(c => c.Name == name);
+        }
+
+        public bool isHavingProduct(int categoryId)
+        {
+            return _dataContext.Products.Any(_ => _.CategoryId == categoryId);
         }
 
         public void Update(Category category)
