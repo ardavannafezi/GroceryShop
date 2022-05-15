@@ -17,7 +17,7 @@ using GroceryShop.TestTools.categories;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("حذف دسته بندی کالا")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
@@ -25,14 +25,11 @@ namespace GroceryShop.Specs.Categories
     )]
     public class DeleteCategory: EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
         private readonly CategoryServices  _sut;
         private readonly CategoryRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private AddCategoryDto _dto;
+        Category category;
         Action expected;
 
         public DeleteCategory(ConfigurationFixture configuration) : base(configuration)
@@ -40,28 +37,27 @@ namespace GroceryShop.Specs.Categories
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFCategoryRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new CategoryAppService(_repository, _unitOfWork, _categoryRepository);
+            _sut = new CategoryAppService(_repository, _unitOfWork);
         }
 
         [Given("دسته بندی با عنوان 'لبنیات'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
+            CreateCategoryInDatabase("labaniyat");
         }
 
-
-        [When("میخواهیم دسته بندی با عنوان 'لبنیات' را در فهرست حذف کنیم ")]
+        [When(" دسته بندی لبنیات را در فهرست حذف می کنیم ")]
         public void When()
         {
-           _sut.Delete("labaniyat");
+            _sut.Delete(category.Id);
         }
 
-        [Then("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی کالا نیست ")]
+        [Then("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی کالا نیست")]
         public void Then()
         {
-            _dataContext.Categories.Any(_ => _.Name == "labaniyat").Should().BeFalse();
+            _dataContext.Categories
+                .Any(_ => _.Name == category.Name)
+                .Should().BeFalse();
         }
 
         [Fact]
@@ -71,6 +67,11 @@ namespace GroceryShop.Specs.Categories
                 _ => Given()
             , _ => When()
             , _ => Then());
-        }      
+        }
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
     }
 }

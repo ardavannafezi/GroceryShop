@@ -1,69 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GroceryShop.Entities;
-using GroceryShop.Infrastructure.Test;
+﻿using BookStore.Persistence.EF;
+using FluentAssertions;
+using GroceryShop.Infrastructure.Application;
 using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
+using GroceryShop.Services.Books.Contracts;
+using GroceryShop.Services.Categories;
+using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Specs.Infrastructure;
-using FluentAssertions;
+using GroceryShop.TestTools.categories;
+using System.Linq;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
-using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Persistence.EF;
-using GroceryShop.Services.Books.Contracts;
-using BookStore.Persistence.EF;
-using GroceryShop.Services.Categories;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario("تعریف دسته بندی کالا")]
     [Feature("",
-        AsA = "فروشنده ",
-        IWantTo = "   دسته بندی کالا را مدیریت کنم",
+        AsA = "فروشنده",
+        IWantTo = "دسته بندی کالا را مدیریت کنم",
         InOrderTo = "آنها را تعریف کنم"
     )]
     public class AddCategories : EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
+        private readonly CategoryServices _sut;
+        private readonly CategoryRepository _repository;
+        private readonly UnitOfWork _unitOfWork;
+        AddCategoryDto dto;
 
-        private Category _category;
-        private AddCategoryDto _dto;
         public AddCategories(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
+            _unitOfWork = new EFUnitOfWork(_dataContext);
+            _repository = new EFCategoryRepository(_dataContext);
+            _sut = new CategoryAppService(_repository, _unitOfWork);
         }
 
         [Given("هیچ دسته بندی در فهرست دسته بندی کالا وجود ندارد")]
-        public void Given() 
+        public void Given()
         {
-
+            _dataContext.Categories.Any().Should().BeFalse();
         }
 
         [When("دسته بندی با عنوان 'لبنیات' تعریف میکنم")]
         public void When()
         {
-            _dto = new AddCategoryDto()
-            {
-                Name =  "labaniyat"
-            };
-            var _unitOfWork = new EFUnitOfWork(_dataContext);
-            CategoryRepository _categoryRepository = new EFCategoryRepository(_dataContext);
-            CategoryServices _sut = new CategoryAppService(_categoryRepository,
-                _unitOfWork,
-                _productrepository);
-
-            _sut.Add(_dto);
+            dto = CategoryFactory.AddCategoryDto("labaniyat");
+            _sut.Add(dto);
         }
 
-        [Then("دسته بندی با عنوان'لبنیات'در فهرست دسته بندی کالا باید وجود داشته باشد.")]
+        [Then("دسته بندی با عنوان'لبنیات'در فهرست دسته بندی کالا موجود است.")]
         public void Then()
         {
-            var expected = _dataContext.Categories.FirstOrDefault();
-            expected.Name.Should().Be(_dto.Name);
+            var expected = _dataContext.Categories
+                .Any(_ => _.Name == dto.Name).Should().BeTrue();
         }
 
         [Fact]
@@ -73,7 +63,6 @@ namespace GroceryShop.Specs.Categories
             When();
             Then();
         }
-
-
     }
 }
+

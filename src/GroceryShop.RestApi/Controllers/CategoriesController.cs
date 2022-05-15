@@ -1,19 +1,15 @@
 ﻿using GroceryShop.Services.Categories;
 using GroceryShop.Services.Categories.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace GroceryShop.RestApi.Controllers
 {
-
-
     [Route("api/Categories")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
         private readonly CategoryAppService _sut;
-
         public CategoriesController(CategoryAppService service)
         {
             _sut = service;
@@ -31,19 +27,16 @@ namespace GroceryShop.RestApi.Controllers
             return _sut.GetAll();
         }
 
-
         [HttpDelete("{id}")]
-        public void DeleteCategory(string name)
+        public void DeleteCategory(int id)
         {
-            _sut.Delete(name);
+            _sut.Delete(id);
         }
-
 
         [HttpPut("{id}")]
-        public void UpdateCategory(UpdateCategoryDto dto, string name)
+        public void UpdateCategory(UpdateCategoryDto dto, int id)
         {
-            _sut.Update(dto, name);
+            _sut.Update(dto, id);
         }
     }
-
 }

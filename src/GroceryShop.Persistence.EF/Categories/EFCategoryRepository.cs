@@ -1,11 +1,7 @@
 ﻿using GroceryShop.Entities;
-using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Categories.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Persistence.EF.Categories
 {
@@ -23,9 +19,14 @@ namespace GroceryShop.Persistence.EF.Categories
             _dataContext.Categories.Add(category);
         }
 
-        public void Delete(string name)
+        public void Delete(Category category)
         {
-            _dataContext.Categories.Remove(FindByName(name));
+            _dataContext.Categories.Remove(category);
+        }
+
+        public Category FindById(int id)
+        {
+            return _dataContext.Categories.FirstOrDefault(x => x.Id == id);
         }
 
         public Category FindByName(string name)
@@ -43,11 +44,9 @@ namespace GroceryShop.Persistence.EF.Categories
                }).ToList();
         }
 
-    
-
-        public bool IsCategoryExist(string name)
+        public bool IsCategoryExist(int id)
         {
-            if (_dataContext.Categories.Any(x => x.Name == name))
+            if (_dataContext.Categories.Any(x => x.Id == id))
             {
                 return true;
             }
@@ -58,6 +57,10 @@ namespace GroceryShop.Persistence.EF.Categories
         }
 
         public bool IsCategoryExistById(string name)
+        {
+            return _dataContext.Categories.Any(c => c.Name == name);
+        }
+        public bool IsCategoryByName(string name)
         {
             return _dataContext.Categories.Any(c => c.Name == name);
         }
@@ -72,4 +75,4 @@ namespace GroceryShop.Persistence.EF.Categories
             _dataContext.Categories.Update(category);
         }
     }
-    }
+}

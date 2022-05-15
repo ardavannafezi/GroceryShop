@@ -1,16 +1,11 @@
 ﻿using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Imports.Contract;
 using GroceryShop.Services.Products;
 using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Services.Sells.Contract;
 using GroceryShop.Services.Sells.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Services.Imports
 {

@@ -17,7 +17,7 @@ using GroceryShop.TestTools.categories;
 
 namespace GroceryShop.Specs.Categories
 {
-    [Scenario("تعریف دسته بندی")]
+    [Scenario(" تعریف دسته بندی با عنوان تکراری")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
@@ -25,14 +25,11 @@ namespace GroceryShop.Specs.Categories
     )]
     public class AddcategoryWirhDuplicatedName: EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
         private readonly CategoryServices  _sut;
         private readonly CategoryRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private AddCategoryDto _dto;
+        Category category;
         Action expected;
 
         public AddcategoryWirhDuplicatedName (ConfigurationFixture configuration) : base(configuration)
@@ -40,43 +37,37 @@ namespace GroceryShop.Specs.Categories
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFCategoryRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new CategoryAppService(_repository, _unitOfWork, _categoryRepository);
+            _sut = new CategoryAppService(_repository, _unitOfWork);
         }
 
         [Given("دسته بندی با عنوان 'لبنیات'در فهرست دسته بندی کالا وجود دارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
+            CreateCategoryInDatabase("labaniyat");
         }
-
 
         [When("دسته بندی با عنوان 'لبنیات' تعریف میکنم")]
         public void When()
         {
-            AddCategoryDto dto = GenerateAddCategoryDto();
-
+            AddCategoryDto dto = CategoryFactory
+                .AddCategoryDto("labaniyat");
             expected = () => _sut.Add(dto);
-
         }
    
         [Then("تنها یک دسته بندی با عنوان ' لبنیات' باید در فهرست دسته بندی کالا وجود داشته ")]
         public void Then()
         {
-
-            _dataContext.Categories.Count(Categories => Categories.Name == "labaniyat").Should().Be(1);
-
+            _dataContext.Categories
+                .Count(_ => _.Name == category.Name)
+                .Should().Be(1);
         }
-
 
         [And("خطایی با عنوان 'عنوان دسته بندی کالا تکراریست ' باید رخ دهد.")]
         public void ThenAnd()
         {
-            
-            expected.Should().ThrowExactly<DuplicatedCategoryNameExeption>();
+            expected.Should()
+                .ThrowExactly<DuplicatedCategoryNameExeption>();
         }
-
 
         [Fact]
         public void Run()
@@ -88,15 +79,10 @@ namespace GroceryShop.Specs.Categories
             , _ => ThenAnd());
         }
 
-
-        private static AddCategoryDto GenerateAddCategoryDto()
+        private void CreateCategoryInDatabase(string name)
         {
-            return new AddCategoryDto
-            {
-                Name = "labaniyat",
-            };
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
         }
-
-       
     }
 }

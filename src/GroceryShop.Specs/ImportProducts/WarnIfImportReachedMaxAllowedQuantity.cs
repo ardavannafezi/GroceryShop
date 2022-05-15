@@ -14,10 +14,7 @@ using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
@@ -95,7 +92,8 @@ namespace GroceryShop.Specs.BuyProducts
         [And("موجودی کالا بدون تغییر می باشد")]
         public void ThenAnd()
         {
-            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == 1).Quantity.Should().Be(1);
+            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == 1)
+                .Quantity.Should().Be(1);
         }
 
         [Fact]

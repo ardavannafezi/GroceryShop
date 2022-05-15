@@ -14,10 +14,7 @@ using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 

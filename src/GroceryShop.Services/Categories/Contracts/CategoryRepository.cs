@@ -1,9 +1,5 @@
 ﻿using GroceryShop.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Services.Categories.Contracts
 {
@@ -14,8 +10,10 @@ namespace GroceryShop.Services.Categories.Contracts
         void Update(Category category);
         IList<GetCategoryDto> GetAll();
         Category FindByName(string name);
-        bool IsCategoryExist(string name);
-        void Delete(string name);
+        Category FindById(int id);
+        bool IsCategoryExist(int id);
+        bool IsCategoryByName(string Name);
+        void Delete(Category category);
         bool isHavingProduct(int categoryId);
     }
 }

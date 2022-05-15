@@ -1,7 +1,6 @@
 ﻿using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Data.SqlClient;
 using System.IO;
 
@@ -56,7 +55,7 @@ namespace GroceryShop.Migrations
                 .ConfigureRunner(_ => _
                     .AddSqlServer()
                     .WithGlobalConnectionString(connectionString)
-                    .ScanIn(typeof(_202201051203).Assembly).For.All())
+                    .ScanIn(typeof(_202205020000).Assembly).For.All())
                 .AddSingleton<MigrationSettings>(options)
                 .AddLogging(_ => _.AddFluentMigratorConsole())
                 .BuildServiceProvider();

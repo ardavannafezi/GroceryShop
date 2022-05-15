@@ -3,15 +3,12 @@ using System.Linq;
 using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
-using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Specs.Infrastructure;
 using FluentAssertions;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Books.Contracts;
 using BookStore.Persistence.EF;
-using GroceryShop.Services.Categories;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.TestTools.categories;
 using GroceryShop.Services.Products.Contracts;
@@ -21,7 +18,7 @@ using GroceryShop.TestTools.Products;
 
 namespace GroceryShop.Specs.Products
 {
-    [Scenario("تعریف کالا")]
+    [Scenario(" تعریف کالا با کد تکراری")]
     [Feature("",
         AsA = "فروشنده ",
         IWantTo = "   دسته بندی کالا را مدیریت کنم",
@@ -34,45 +31,32 @@ namespace GroceryShop.Specs.Products
         private readonly ProductServices  _sut;
         private readonly ProductRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private AddCategoryDto _dto;
+        Category category;
+        AddProductDto dto;
         Action expected;
         Product product;
+
         public AddProductWithDuplicatedProductCode(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFProductRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
+            _sut = new ProductAppServices(_repository, _unitOfWork);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست  کالا وجود دارد")]
+        [Given("کالایی با عنوان 'ماست شیرازی' و کد 2 در فهرست کالا وجود دارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
+            CreateCategoryInDatabase("labaniyat");
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(2)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-
+            CreateProductInDatabase("maste shirazi", 2, category.Id);
         }
-
 
         [When("کالایی با عنوان 'ماست کاله' با کد 2 تعریف میکنم")]
         public void When()
         {
-            var dto = new ProductDtoBuilder()
-               .WithName("maste kaleh")
-               .WithCategoryName("labaniyat")
-               .WithProductCode(2)
-               .Build();
+            dto = CreateProductDtoWithBuilder
+               ("maste kaleh", 2, category.Id);
 
             expected = () => _sut.Add(dto);
         }
@@ -92,15 +76,47 @@ namespace GroceryShop.Specs.Products
             expected.Should().ThrowExactly<ProductCodeIsDuplicatedExeption>();
         }
 
-
         [Fact]
         public void Run()
         {
             Runner.RunScenario(
-                _ => Given()
+              _ => Given()
             , _ => When()
             , _ => Then()
             , _ => ThenAnd());;
-        }      
+        }
+
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
+
+        private void CreateProductInDatabase
+            (string name,
+            int productCode,
+            int categoryId
+            )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithProductCode(productCode)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
+
+        private static AddProductDto CreateProductDtoWithBuilder
+            (string name,
+             int productCode,
+             int categoryId
+            )
+        {
+            return new ProductDtoBuilder()
+               .WithName(name)
+               .WithProductCode(productCode)
+               .WithCategoryId(categoryId)
+               .Build();
+        }
     }
 }

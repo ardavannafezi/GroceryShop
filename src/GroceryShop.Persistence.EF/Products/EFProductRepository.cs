@@ -1,10 +1,7 @@
 ﻿using GroceryShop.Entities;
 using GroceryShop.Services.Products.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Persistence.EF.Products
 {
@@ -25,7 +22,7 @@ namespace GroceryShop.Persistence.EF.Products
         public bool isProductCodeExist(int code)
         {
             if (_dataContext.Products
-                .Any(Products => Products.ProductCode == code))
+                .Any(_ => _.ProductCode == code ))
             {
                 return true;
             }
@@ -33,21 +30,20 @@ namespace GroceryShop.Persistence.EF.Products
             {
                 return false;
             }
-
         }
 
-        public bool isProductNameExist(string name)
+        public bool isProductNameExistInCategory
+            (string name,int categoryId)
         {
           if (_dataContext.Products
-                .Any(Products => Products.Name == name))
+                .Any(_ => _.Name == name && _.CategoryId == categoryId))
             {
                 return true;
             }
             else
             {
                 return false;
-            }
-            
+            }   
         }
 
         public int GetQuantity(int code)
@@ -80,8 +76,6 @@ namespace GroceryShop.Persistence.EF.Products
                    CategoryId = x.CategoryId,
                    MaxInStock = x.MaxInStock,
                    MinInStock = x.MinInStock,
-                   BuyPrice = x.BuyPrice,
-                   SellPrice = x.SellPrice,
                    Quantity = x.Quantity,
                }).ToList();
         }
@@ -144,13 +138,8 @@ namespace GroceryShop.Persistence.EF.Products
                    CategoryId = x.CategoryId,
                    MaxInStock = x.MaxInStock,
                    MinInStock = x.MinInStock,
-                   BuyPrice = x.BuyPrice,
-                   SellPrice = x.SellPrice,
                    Quantity = x.Quantity,
                }).ToList();
         }
-
-    
-        
     }
 }

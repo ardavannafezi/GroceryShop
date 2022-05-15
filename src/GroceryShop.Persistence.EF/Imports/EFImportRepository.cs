@@ -1,11 +1,8 @@
 ﻿using GroceryShop.Entities;
 using GroceryShop.Services.Imports.Contract;
 using GroceryShop.Services.Products.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Persistence.EF.Imports
 {

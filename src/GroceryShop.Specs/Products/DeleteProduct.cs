@@ -3,15 +3,11 @@ using System.Linq;
 using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
-using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Specs.Infrastructure;
 using FluentAssertions;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
-using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Books.Contracts;
 using BookStore.Persistence.EF;
-using GroceryShop.Services.Categories;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.TestTools.categories;
 using GroceryShop.Services.Products.Contracts;
@@ -34,54 +30,38 @@ namespace GroceryShop.Specs.Products
         private readonly ProductServices  _sut;
         private readonly ProductRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private AddCategoryDto _dto;
-        Action expected;
+        Category category;
         Product product;
+
         public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFProductRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new ProductAppServices(_repository, _unitOfWork, _categoryRepository);
+            _sut = new ProductAppServices(_repository, _unitOfWork);
         }
 
-        [Given("کالایی با عنوان 'ماست شیرازی'در فهرست کالا وجود دارد")]
+        [Given("کالایی با عنوان ماست شیرازی و کد 1 تعریف شده")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(2)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
+            CreateCategoryInDatabase("labaniyat");
+            CreateProductInDatabase("maste shirazi", 1, category.Id);
 
         }
 
-
-        [When("کالای با کد '02'  را حذف می کنیم")]
+        [When("کالای با کد '1' را حذف می کنیم")]
         public void When()
         {
-            _sut.Delete(2);
+            _sut.Delete(1);
         }
 
-        [Then("هیچ کالایی در فهرست کالا ها با کد '02' وجود ندارد  ")]
+        [Then("هیچ کالایی در فهرست کالا ها با کد '1' وجود ندارد")]
         public void Then()
         {
             var expected = _dataContext.Products
                 .Any(_ => _.ProductCode == product.ProductCode);
-            expected.Should().BeFalse();
-            
+            expected.Should().BeFalse();    
         }
-
-      
-
 
         [Fact]
         public void Run()
@@ -91,6 +71,26 @@ namespace GroceryShop.Specs.Products
             , _ => When()
             , _ => Then()
            );;
-        }      
+        }
+
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
+
+        private void CreateProductInDatabase
+           (string name,
+           int productCode,
+           int categoryId
+           )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithProductCode(productCode)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
     }
 }

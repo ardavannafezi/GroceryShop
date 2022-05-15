@@ -7,15 +7,12 @@ using GroceryShop.Persistence.EF;
 using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Persistence.EF.Imports;
 using GroceryShop.Persistence.EF.Products;
-using GroceryShop.Services.Books.Contracts;
-using GroceryShop.Services.Categories;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
 using GroceryShop.Services.Products;
 using GroceryShop.Services.Products.Contracts;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
-using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Linq;

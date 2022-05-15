@@ -1,14 +1,9 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Migrations
 {
-    [Migration(202203050426)]
-    public class _202203050426 : Migration
+    [Migration(202205020000)]
+    public class _202205020000 : Migration
     {
 
         public override void Up()
@@ -29,14 +24,9 @@ namespace GroceryShop.Migrations
                             .WithColumn("Name").AsString(50).NotNullable()
                             .WithColumn("CategoryId").AsInt32().NotNullable()
                             .ForeignKey("FK_Products_Categories", "Categories", "Id")
-                            .WithColumn("BuyPrice").AsDouble().NotNullable()
-                            .WithColumn("SellPrice").AsDouble().NotNullable()
                             .WithColumn("Quantity").AsInt32().NotNullable()
                             .WithColumn("MaxInStock").AsInt32()
                             .WithColumn("MinInStock").AsInt32();
-
-
         }
-
     }
 }

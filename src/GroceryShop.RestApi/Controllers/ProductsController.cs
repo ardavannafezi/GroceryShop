@@ -1,15 +1,11 @@
-﻿using GroceryShop.Services.Categories;
-using GroceryShop.Services.Categories.Contracts;
+﻿using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Products;
 using GroceryShop.Services.Products.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace GroceryShop.RestApi.Controllers
 {
-
-
     [Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -32,7 +28,6 @@ namespace GroceryShop.RestApi.Controllers
         {
             return _sut.GetAll();
         }
-
 
         [HttpDelete("{id}")]
         public void Delete(int code)

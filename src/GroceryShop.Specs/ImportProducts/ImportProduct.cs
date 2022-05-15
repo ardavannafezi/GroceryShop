@@ -15,10 +15,7 @@ using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
 using GroceryShop.TestTools.Products;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
 
@@ -65,10 +62,10 @@ namespace GroceryShop.Specs.BuyProducts
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
+           
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));

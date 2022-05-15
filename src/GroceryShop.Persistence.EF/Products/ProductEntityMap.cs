@@ -1,11 +1,6 @@
 ﻿using GroceryShop.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Persistence.EF.Categories
 {
@@ -26,12 +21,6 @@ namespace GroceryShop.Persistence.EF.Categories
 
             builder.Property(_ => _.Quantity);
 
-            builder.Property(_ => _.SellPrice);
-
-            builder.Property(_ => _.BuyPrice);
-
-
-
             builder.HasMany(_ => _.Imports)
                 .WithOne(_ => _.Product)
                 .HasForeignKey(_ => _.ProductCode)
@@ -41,7 +30,6 @@ namespace GroceryShop.Persistence.EF.Categories
             .WithOne(_ => _.Product)
             .HasForeignKey(_ => _.ProductCode)
             .OnDelete(DeleteBehavior.ClientNoAction);
-
         }
     }
 }

@@ -1,14 +1,9 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Migrations
 {
-    [Migration(20220506015)]
-    public class _20220506015 : Migration
+    [Migration(202205040000)]
+    public class _202205040000 : Migration
     {
 
         public override void Up()

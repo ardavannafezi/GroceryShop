@@ -2,12 +2,7 @@
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Books.Contracts;
 using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Products.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Services.Categories
 {
@@ -15,16 +10,13 @@ namespace GroceryShop.Services.Categories
     {
         private readonly CategoryRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
 
         public CategoryAppService(
             CategoryRepository repositoy,
-            UnitOfWork unitOfWork,
-            CategoryRepository categoryRepository)
+            UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _repository = repositoy;
-            _categoryRepository = categoryRepository;
         }
 
         public void Add(AddCategoryDto dto)
@@ -45,23 +37,23 @@ namespace GroceryShop.Services.Categories
             _unitOfWork.Commit();
         }
 
-        public void Delete(string name)
+        public void Delete(int id)
         {
-            bool isCategoryAlreadyExist = _repository.IsCategoryExist(name);
+            bool isCategoryAlreadyExist = _repository.IsCategoryExist(id);
             if (isCategoryAlreadyExist == false)
             {
                 throw new CategoryNotFoundExeption();
             }
 
-            int categoryId = _repository.FindByName(name).Id;
+            Category category = _repository.FindById(id);
             
-            bool isProductExistInCategory = _repository.isHavingProduct(categoryId);
+            bool isProductExistInCategory = _repository.isHavingProduct(category.Id);
             if (isProductExistInCategory)
             {
                 throw new CategoryHasExistingProduct();
             }
 
-            _repository.Delete(name);
+            _repository.Delete(category);
             _unitOfWork.Commit();
         }
 
@@ -70,23 +62,21 @@ namespace GroceryShop.Services.Categories
             return _repository.GetAll();
         }
 
-        public void Update(UpdateCategoryDto dto, string name)
+        public void Update(UpdateCategoryDto dto, int id)
         {
 
-            bool isCategoryAlreadyExist = _repository.IsCategoryExist(dto.Name);
+            bool isCategoryAlreadyExist = _repository.IsCategoryByName(dto.Name);
             if (isCategoryAlreadyExist)
             {
                 throw new TheCategoryNameAlreadyExist();
             }
 
-            Category category = _repository.FindByName(name);
+            Category category = _repository.FindById(id);
 
             category.Name = dto.Name;
 
             _repository.Update(category);
             _unitOfWork.Commit();
-
         }
-
     }
 }

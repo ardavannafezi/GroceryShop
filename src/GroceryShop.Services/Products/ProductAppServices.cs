@@ -2,11 +2,7 @@
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Products.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryShop.Services.Products
 {
@@ -14,22 +10,19 @@ namespace GroceryShop.Services.Products
     {
         private readonly ProductRepository _repository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
 
         public ProductAppServices(
             ProductRepository repositoy,
-            UnitOfWork unitOfWork,
-            CategoryRepository cateogryRepository)
+            UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _repository = repositoy;
-            _categoryRepository = cateogryRepository;
         }
 
         public void Add(AddProductDto dto)
         {
-
-            bool isProductNameExist = _repository.isProductNameExist(dto.Name);
+            bool isProductNameExist = _repository.isProductNameExistInCategory
+                (dto.Name,dto.CategoryId);
             if (isProductNameExist)
             {
                 throw new ProductNameIsDuplicatedExeption();
@@ -41,20 +34,16 @@ namespace GroceryShop.Services.Products
                 throw new ProductCodeIsDuplicatedExeption();
             }
 
-
-            var categoryId = _categoryRepository.FindByName(dto.CategoryName).Id;
-
             var product = new Product
             {
                 Name = dto.Name,
-                CategoryId = categoryId,
+                CategoryId = dto.CategoryId,
                 ProductCode = dto.ProductCode,
                 MaxInStock = dto.MaxInStock,
                 MinInStock = dto.MinInStock,
-                BuyPrice = dto.BuyPrice,
-                SellPrice = dto.SellPrice,
                 Quantity = dto.Quantity,
             };
+
             _repository.Add(product);
             _unitOfWork.Commit();
         }
@@ -66,7 +55,6 @@ namespace GroceryShop.Services.Products
                 throw new ProductNotFoundExeption();
             }
            
-
             _repository.Delete(_repository.FindById(code));
             _unitOfWork.Commit();
         }
@@ -80,7 +68,8 @@ namespace GroceryShop.Services.Products
         {
             string productName = _repository.GetNameByCode(id);
 
-            bool isProductNameAlreadyExist = _repository.isNameAlreadyExist(dto.Name);
+            bool isProductNameAlreadyExist =
+                _repository.isProductNameExistInCategory(dto.Name, dto.CategoryId);
             if (isProductNameAlreadyExist && productName != dto.Name)
             {
                 throw new ProductNameIsDuplicatedExeption();
@@ -92,16 +81,11 @@ namespace GroceryShop.Services.Products
                 throw new ProductCodeIsDuplicatedExeption();
             }
 
-
             Product product = _repository.FindById(dto.ProductCode);
 
-            var categoryId = _categoryRepository.FindByName(dto.CategoryName).Id;
-
             product.Name = dto.Name;
-            product.BuyPrice = dto.BuyPrice;
-            product.SellPrice = dto.SellPrice;
             product.Quantity = dto.Quantity;
-            product.CategoryId = categoryId;
+            product.CategoryId = dto.CategoryId;
             product.ProductCode = dto.ProductCode;
             product.MaxInStock = dto.MaxInStock;
             product.MinInStock = dto.MinInStock;

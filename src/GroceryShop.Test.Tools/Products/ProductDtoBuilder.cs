@@ -1,5 +1,4 @@
-﻿using GroceryShop.Entities;
-using GroceryShop.Services.Categories.Contracts;
+﻿using GroceryShop.Services.Categories.Contracts;
 
 namespace GroceryShop.TestTools.categories
 {
@@ -8,15 +7,13 @@ namespace GroceryShop.TestTools.categories
         AddProductDto productDto;
         public ProductDtoBuilder()
         {
-           productDto =  new AddProductDto
+            productDto = new AddProductDto
             {
                 ProductCode = 1,
                 Name = "dummy",
-                CategoryName = "dummy",
+                CategoryId = 1,
                 MaxInStock = 5,
                 MinInStock = 1,
-                BuyPrice = 100,
-                SellPrice = 200,
                 Quantity = 4,
             };
         }
@@ -30,11 +27,22 @@ namespace GroceryShop.TestTools.categories
             productDto.Name = name;
             return this;
         }
-        public ProductDtoBuilder WithCategoryName(string name)
+        public ProductDtoBuilder WithCategoryId(int categoryId)
         {
-            productDto.CategoryName = name;
+            productDto.CategoryId = categoryId;
             return this;
         }
+        public ProductDtoBuilder WithMaxInStock(int maxInStock)
+        {
+            productDto.MaxInStock = maxInStock;
+            return this;
+        }
+        public ProductDtoBuilder WithMinInStock(int minInStock)
+        {
+            productDto.MinInStock = minInStock;
+            return this;
+        }
+
         public AddProductDto Build()
         {
             return productDto;
@@ -49,11 +57,9 @@ namespace GroceryShop.TestTools.categories
             {
                 ProductCode = 1,
                 Name = "dummy",
-                CategoryName = "dummy",
+                CategoryId = 1,
                 MaxInStock = 5,
                 MinInStock = 1,
-                BuyPrice = 100,
-                SellPrice = 200,
                 Quantity = 4,
             };
         }
@@ -69,22 +75,20 @@ namespace GroceryShop.TestTools.categories
             productDto.Name = name;
             return this;
         }
-
-        public UpdateProductDtoBuilder WithSellPrice(double price)
+ 
+        public UpdateProductDtoBuilder WithCategoryId(int id)
         {
-            productDto.SellPrice = price;
+            productDto.CategoryId = id;
             return this;
         }
-
-         public UpdateProductDtoBuilder WithBuyPrice(double price)
+        public UpdateProductDtoBuilder WithMaxInStock(int max)
         {
-            productDto.BuyPrice = price;
+            productDto.MaxInStock = max;
             return this;
         }
-        
-        public UpdateProductDtoBuilder WithCategoryName(string name)
+        public UpdateProductDtoBuilder WithMinInStock(int min)
         {
-            productDto.CategoryName = name;
+            productDto.MinInStock = min;
             return this;
         }
 

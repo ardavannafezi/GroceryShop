@@ -1,10 +1,5 @@
-﻿using GroceryShop.Services.Categories;
-using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Imports;
+﻿using GroceryShop.Services.Imports;
 using GroceryShop.Services.Imports.Contract;
-using GroceryShop.Services.Products;
-using GroceryShop.Services.Products.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 

@@ -1,7 +1,4 @@
-﻿using GroceryShop.Entities;
-using GroceryShop.Services.Categories.Contracts;
-using GroceryShop.Services.Imports.Contract;
-using GroceryShop.Services.Sells.Contract;
+﻿using GroceryShop.Services.Sells.Contract;
 
 namespace GroceryShop.TestTools.categories
 {
