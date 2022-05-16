@@ -4,10 +4,7 @@ using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
-using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Persistence.EF.Imports;
-using GroceryShop.Persistence.EF.Products;
-using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
 using GroceryShop.Services.Imports.Contract;
 using GroceryShop.Services.Products.Contracts;
@@ -29,18 +26,12 @@ namespace GroceryShop.Specs.BuyProducts
   )]
     public class ImportProduct : EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly ImportServices _sut;
-
-        private readonly ProductRepository _productRepository;
         private readonly ImportRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private Product _product;
+        Category category;
+        Product product;
         Action expected;
         AddImportDto dto;
 
@@ -49,40 +40,26 @@ namespace GroceryShop.Specs.BuyProducts
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFImportRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _productRepository = new EFProductRepository(_dataContext);
 
-            _sut = new ImportAppServices(_repository, _unitOfWork, _categoryRepository , _productRepository);
+            _sut = new ImportAppServices(_repository, _unitOfWork);
         }
 
 
         [Given("کالایی با کد '01' در فهرست کالا ها تعریف شده است و هیچ کالایی موجود 	نیست")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-           
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(category.Id)
-               .WithProductCode(1)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
+            CreateCategoryInDatabase("labaniyat");
+            CreateProductInDatabase("maste shirazi", 1, category.Id, 0);
         }
 
         [When("ورودی کالای کد '01' را به تعداد '5'  وارد می کنم")]
         public void When()
         {
-            dto = new ImportDtoBuilder()
-              .WithProductCode(1)
-              .WithQuantity(5)
-              .Build();
+            CreateImportDto(1,5);
 
             _sut.Add(dto);
-
         }
-
+   
         [When("ورودی کالای کد '01' را به تعداد '5'موجود می باشد")]
         public void Then()
         {
@@ -91,8 +68,6 @@ namespace GroceryShop.Specs.BuyProducts
 
         }
 
-
-
         [Fact]
         public void Run()
         {
@@ -100,6 +75,35 @@ namespace GroceryShop.Specs.BuyProducts
                 _ => Given()
             , _ => When()
             , _ => Then()) ;
+        }
+
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
+
+        private void CreateProductInDatabase
+           (string name,
+           int productCode,
+           int categoryId,
+           int quantity
+           )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithProductCode(productCode)
+                .WithQuantity(quantity)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
+        private void CreateImportDto(int productCode, int quantity)
+        {
+            dto = new ImportDtoBuilder()
+              .WithProductCode(productCode)
+              .WithQuantity(quantity)
+              .Build();
         }
     }
 }

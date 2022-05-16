@@ -24,17 +24,19 @@ namespace GroceryShop.Persistence.EF.Sells
         public List<GetSellsDto> GetAll()
         {
             return _dataContext.Sells
-                        .Select(x => new GetSellsDto
-                        {
-                            ProductCode = x.ProductCode,
-                            Id = x.Id,
-                            Quantity = x.Quantity,
+                .Select(x => new GetSellsDto
+                {
+                    ProductCode = x.ProductCode,
+                    Id = x.Id,
+                    Quantity = x.Quantity,
+                    dateTime = x.dateTime,
+                            
              }).ToList();
         }
 
-         public void Delete(int id)
+         public void Delete(Sell sell)
         {
-            _dataContext.Sells.Remove(GetById(id));
+            _dataContext.Sells.Remove(sell);
         }
 
 
@@ -69,7 +71,45 @@ namespace GroceryShop.Persistence.EF.Sells
                            ProductCode = x.ProductCode,
                            Id = x.Id,
                            Quantity = x.Quantity,
+                           dateTime = x.dateTime,
                        }).ToList();
+        }
+
+        public bool isProductCodeExist(int productCode)
+        {
+            if (_dataContext.Products
+              .Any(_ => _.ProductCode == productCode))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Product FindProductById(int productCode)
+        {
+            return _dataContext.Products.FirstOrDefault
+                (Products => Products.ProductCode == productCode);
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            _dataContext.Products.Update(product);
+        }
+
+        public int GetProductMaxInStock(int productCode)
+        {
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == productCode)
+                .MaxInStock;
+        }
+        public int GetProductMinInStock(int productCode)
+        {
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == productCode)
+                .MinInStock;
         }
     }
 }

@@ -17,6 +17,8 @@ namespace GroceryShop.Persistence.EF.Sells
 
             builder.Property(_ => _.Quantity);
 
+            builder.Property(_ => _.dateTime);
+
             builder.Property(_ => _.ProductCode);
 
         }

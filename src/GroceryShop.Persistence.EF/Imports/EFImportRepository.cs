@@ -26,6 +26,12 @@ namespace GroceryShop.Persistence.EF.Imports
             _dataContext.Imports.Remove(GetById(id));
         }
 
+        public Product FindProductById(int productCode)
+        {
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == productCode);
+        }
+
         public List<GetImportsDto> GetAll()
         {
             return _dataContext.Imports
@@ -66,9 +72,34 @@ namespace GroceryShop.Persistence.EF.Imports
             }
         }
 
+        public bool isProductCodeExist(int productCode)
+        {
+            if (_dataContext.Products
+                           .Any(_ => _.ProductCode == productCode))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void Update(Import import)
         {
             _dataContext.Update(import);
+        }
+
+        public int GetMaxInStock(int code)
+        {
+            return _dataContext.Products
+                .FirstOrDefault(Products => Products.ProductCode == code)
+                .MaxInStock;
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            _dataContext.Products.Update(product);
         }
     }
 }

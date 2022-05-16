@@ -4,11 +4,9 @@ using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
-using GroceryShop.Persistence.EF.Categories;
 using GroceryShop.Persistence.EF.Imports;
-using GroceryShop.Persistence.EF.Products;
-using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
+using GroceryShop.Services.Imports.Contract;
 using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
@@ -28,83 +26,60 @@ namespace GroceryShop.Specs.BuyProducts
   )]
     public class UpdateImport : EFDataContextDatabaseFixture
     {
-
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly ImportServices _sut;
-
-        private readonly ProductRepository _productRepository;
         private readonly ImportRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private Product _product;
-        Action expected;
-        private Import import;
+        Category category;
+        Product product;
+        Import import;
+        UpdateImportDto dto;
+        int NewQuantity;
 
         public UpdateImport(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFImportRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _productRepository = new EFProductRepository(_dataContext);
 
-            _sut = new ImportAppServices(_repository, _unitOfWork, _categoryRepository , _productRepository);
+            _sut = new ImportAppServices(_repository, _unitOfWork);
         }
 
 
         [Given("کالایی با کد '01' و تعداد' 3'  وارد شده")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithQuantity(8)
-               .WithProductCode(1)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-
-            import = new ImportBuilder()
-                .WithProductCode(1)
-                .WithQuantity(3)
-                .Build();
-            _dataContext.Manipulate(_ => _.Imports.Add(import));
+            CreateCategoryInDatabase("labaniyat");
+            CreateProductInDatabase("maste shirazi", 1, category.Id, 0);
+            NewQuantity = product.Quantity;
+            CreateImportInDatabase(1, 3);
+            NewQuantity = NewQuantity -  import.Quantity;
 
         }
 
         [When("ورودی کالا با کد 1 را به تعداد 5  ویرایش می کنم")]
         public void When()
         {
+            dto = CreateUpdateImportDto(1,5);
+            NewQuantity = NewQuantity + dto.Quantity;
 
-            var dto = new UpdateImportDtoBuilder()
-                .WithProductCode(1)
-                .WithQuantity(5)
-                .Build();
-
-            _sut.Update(dto ,import.Id);
-
+            _sut.Update(dto, import.Id);
         }
+
 
         [Then(" ورودی با کد کالای '01' و تعداد 1' و موجود میباشد")]
         public void Then()
         {
-            _dataContext.Imports.Count(_ => _.ProductCode == 1
-            && _.Quantity == 5 ).Should().Be(1);
+            _dataContext.Imports.Count(_ => _.ProductCode == dto.ProductCode
+            && _.Quantity == dto.Quantity ).Should().Be(1);
         }
 
         [And(" تعداد 1عدد از کالا موجود می باشد")]
         public void ThenAnd()
         {
-            int productCode = _productRepository.FindById(import.ProductCode).ProductCode;
             _dataContext.Products
-                .FirstOrDefault(_ => _.ProductCode == productCode)
-                .Quantity.Should().Be(10);
+                .FirstOrDefault(_ => _.ProductCode == dto.ProductCode)
+                .Quantity.Should().Be(NewQuantity);
         }
 
         [Fact]
@@ -115,6 +90,44 @@ namespace GroceryShop.Specs.BuyProducts
             , _ => When()
             , _ => Then()
             , _ => ThenAnd()) ;
+        }
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
+
+        private void CreateProductInDatabase
+           (string name,
+           int productCode,
+           int categoryId,
+           int quantity
+           )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithProductCode(productCode)
+                .WithQuantity(quantity)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
+
+        private void CreateImportInDatabase(int productCode, int quantity)
+        {
+            import = new ImportBuilder()
+                .WithProductCode(productCode)
+                .WithQuantity(quantity)
+                .Build();
+            _dataContext.Manipulate(_ => _.Imports.Add(import));
+        }
+
+        private static UpdateImportDto CreateUpdateImportDto(int poductCode, int quantity)
+        {
+            return new UpdateImportDtoBuilder()
+                .WithProductCode(poductCode)
+                .WithQuantity(quantity)
+                .Build();
         }
     }
 }

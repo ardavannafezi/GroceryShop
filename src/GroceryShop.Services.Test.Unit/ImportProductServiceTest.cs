@@ -24,22 +24,17 @@ namespace GroceryShop.Services.Test.Unit
     {
 
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly ImportServices _sut;
         private readonly ImportRepository _repository;
-        private readonly ProductRepository _productRepository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
 
         public ImportProductServiceTest()
         {
             _dataContext = new EFInMemoryDatabase()
                 .CreateDataContext<EFDataContext>();
-            _productRepository = new EFProductRepository(_dataContext);
             _repository = new EFImportRepository(_dataContext);
             _unitOfWork = new EFUnitOfWork(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new ImportAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
+            _sut = new ImportAppServices(_repository, _unitOfWork);
         }
 
         [Fact]
@@ -48,10 +43,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(0)
                .Build();
@@ -76,10 +70,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(3)
                .Build();
@@ -118,10 +111,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(1)
                .WithMaxInStock(12)
@@ -149,10 +141,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
@@ -179,16 +170,15 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .Build();
             _dataContext.Manipulate(_ => _.Products.Add(product));
 
             var import = new ImportBuilder()
-              .WithQuantity(categoryId)
+              .WithQuantity(category.Id)
               .WithProductCode(1)
               .Build();
             _dataContext.Manipulate(_ => _.Imports.Add(import));
@@ -217,10 +207,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithQuantity(8)
                .WithProductCode(1)
                .Build();
@@ -242,7 +231,7 @@ namespace GroceryShop.Services.Test.Unit
             _dataContext.Imports.Count(_ => _.ProductCode == 1
            && _.Quantity == 5).Should().Be(1);
 
-            int productCode = _productRepository.FindById(import.ProductCode).ProductCode;
+            int productCode = _repository.FindProductById(import.ProductCode).ProductCode;
             _dataContext.Products
                 .FirstOrDefault(_ => _.ProductCode == productCode)
                 .Quantity.Should().Be(10);

@@ -1,4 +1,5 @@
 ﻿using GroceryShop.Services.Sells.Contract;
+using System;
 
 namespace GroceryShop.TestTools.categories
 {
@@ -11,6 +12,8 @@ namespace GroceryShop.TestTools.categories
             {
                 ProductCode = 1,
                 Quantity = 4,
+                dateTime = DateTime.Now
+                
             };
         }
         public SellDtoBuilder WithProductCode(int code)
@@ -23,7 +26,12 @@ namespace GroceryShop.TestTools.categories
             selltDto.Quantity = quantity;
             return this;
         }
-     
+        public SellDtoBuilder WithDateTime(DateTime dateTime)
+        {
+            selltDto.dateTime = dateTime;
+            return this;
+        }
+
         public AddSellDto Build()
         {
             return selltDto;
@@ -38,6 +46,8 @@ namespace GroceryShop.TestTools.categories
             {
                 ProductCode = 1,
                 Quantity = 4,
+                dateTime = DateTime.Now
+                
             };
         }
         public UpdatSellDtoBuilder WithProductCode(int code)
@@ -50,7 +60,13 @@ namespace GroceryShop.TestTools.categories
             selltDto.Quantity = quantity;
             return this;
         }
-     
+
+        public UpdatSellDtoBuilder WithDateTime(DateTime dateTime)
+        {
+            selltDto.dateTime = dateTime;
+            return this;
+        }
+
         public UpdateSellDto Build()
         {
             return selltDto;

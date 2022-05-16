@@ -21,9 +21,11 @@ namespace GroceryShop.Migrations
         {
             Create.Table("Sells")
                             .WithColumn("Id").AsInt32().PrimaryKey().NotNullable().Identity()
+                            .WithColumn("dateTime").AsDateTime2()
                             .WithColumn("ProductCode").AsInt32()
                             .ForeignKey("FK_Sells_Products", "Products", "ProductCode")
                             .WithColumn("Quantity").AsInt32().NotNullable();
+                            
 
 
 

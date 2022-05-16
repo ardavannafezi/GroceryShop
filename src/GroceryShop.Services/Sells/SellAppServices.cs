@@ -11,45 +11,34 @@ namespace GroceryShop.Services.Imports
 {
     public class SellAppServices : SellServices
     {
-        private readonly ProductRepository _productRepository;
-
         private readonly SellRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
 
-        private readonly CategoryRepository _categoryRepository;
-
-
         public SellAppServices(
-
             SellRepository repository,
-            UnitOfWork unitOfWork,
-            CategoryRepository cateogryRepository,
-            ProductRepository productRepository)
+            UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
-            _categoryRepository = cateogryRepository;
-            _productRepository = productRepository;
         }
 
         public void Add(AddSellDto dto)
         {
 
-            bool isProductCodeExist = _productRepository.isProductCodeExist(dto.ProductCode);
+            bool isProductCodeExist = _repository.isProductCodeExist(dto.ProductCode);
             if (!isProductCodeExist)
             {
                 throw new ProductNotFoundExeption();
             }
 
-            Product product = _productRepository.FindById(dto.ProductCode);
+            Product product = _repository.FindProductById(dto.ProductCode);
 
             if(product.Quantity < dto.Quantity) { 
 
                 throw new NotEcoughtInStock();
             }
             product.Quantity = product.Quantity - dto.Quantity;
-            _productRepository.Update(product);
+            _repository.UpdateProduct(product);
 
 
             var sell = new Sell
@@ -60,31 +49,31 @@ namespace GroceryShop.Services.Imports
             _repository.Add(sell);
             _unitOfWork.Commit();
 
-            if (product.Quantity <= _productRepository
-                .GetMaxInStock(dto.ProductCode))
+
+            if (product.Quantity <= _repository
+                .GetProductMaxInStock(dto.ProductCode))
             {
                 new ReachedMinimumInStockAlert();
             }
-
         }
-
         
         public void Delete(int id)
         {
-
             if (!_repository.isExist(id))
             {
                 throw new SellNotFoundExeption();
             };
 
-            Product product = _productRepository
-                .FindById(_repository.GetById(id).ProductCode);
+            Sell sell = _repository.GetById(id);
 
-            product.Quantity = product.Quantity + _repository.GetById(id).Quantity;
+            Product product = _repository
+                .FindProductById(sell.ProductCode);
 
-            _productRepository.Update(product);
+            product.Quantity = product.Quantity + sell.Quantity;
 
-            _repository.Delete(id);
+            _repository.UpdateProduct(product);
+
+            _repository.Delete(sell);
             _unitOfWork.Commit();
         }
 
@@ -100,13 +89,13 @@ namespace GroceryShop.Services.Imports
                 throw new SellNotFoundExeption();
             };
 
-            Product product = _productRepository
-               .FindById(_repository.GetById(id).ProductCode);
+            Product product = _repository
+               .FindProductById(_repository.GetById(id).ProductCode);
 
             product.Quantity = product.Quantity
                 + _repository.GetById(id).Quantity - dto.Quantity;
 
-            _productRepository.Update(product);
+            _repository.UpdateProduct(product);
 
 
             Sell sell = _repository.GetById(id);

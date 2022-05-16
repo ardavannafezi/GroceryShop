@@ -10,6 +10,7 @@ using GroceryShop.Persistence.EF.Sells;
 using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
 using GroceryShop.Services.Products.Contracts;
+using GroceryShop.Services.Sells.Contract;
 using GroceryShop.Services.Sells.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
@@ -31,70 +32,52 @@ namespace GroceryShop.Specs.SellProducts
     {
 
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly SellServices _sut;
-
-        private readonly ProductRepository _productRepository;
         private readonly SellRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private Product _product;
-        Action expected;
+        Category category;
+        Product product;
+        AddSellDto dto;
+        int LastQuantity;
 
         public AddSellProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFSellRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _productRepository = new EFProductRepository(_dataContext);
-
-            _sut = new SellAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
+            _sut = new SellAppServices(_repository, _unitOfWork);
         }
 
-
-        [Given("الایی با کد '01' در فهرست کالا ها تعریف شده است و  6 عدد موجود است")]
+        [Given("کالایی با کد '01' در فهرست لبنیات تعریف شده است و 6 عدد موجود است")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(1)
-               .WithQuantity(6)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-
+            CreateCategoryInDatabase("labaniyat");
+            CreateProductInDatabase("maste shirazi", 1, category.Id,6, 1, 10);
+            LastQuantity = product.Quantity;
         }
 
-        [When("کالای 01 را در به تعداد 2 می فروشیم")]
+        [When("کالای 01 را در به تعداد 2 عدد در همین لحظه می فروشیم")]
         public void When()
         {
-            var dto = new SellDtoBuilder()
-              .WithProductCode(1)
-              .WithQuantity(2)
-              .Build();
-
+            dto = CreateAddSellDto(1,2,DateTime.Now);
             _sut.Add(dto);
-
         }
 
-        [Then("فروش کالا در لیست فروش موجود است")]
+        [Then("فروش کالایی با کد کالای1 و تعداد 2 در لیست فروش موجود است")]
         public void Then()
         {
-            _dataContext.Sells.Count(_ => _.ProductCode == 1 && _.Quantity == 2);
-
+            _dataContext.Sells
+                .Count(_ => _.ProductCode == dto.ProductCode && _.Quantity == dto.Quantity);
         }
 
         [And("تعداد 4 کالا در لیست کالا ها باقی")]
         public void ThenAnd()
         {
-            _productRepository.GetQuantity(1).Should().Be(4);
+            int NewQuantity = LastQuantity - dto.Quantity;
+
+            Product expected =  _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == dto.ProductCode);
+             expected.Quantity.Should().Be(NewQuantity);
         }
 
         [Fact]
@@ -105,7 +88,40 @@ namespace GroceryShop.Specs.SellProducts
             , _ => When()
             , _ => Then()
             , _ => ThenAnd());
+        }
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
 
+        private void CreateProductInDatabase
+           (string name,
+           int productCode,
+           int categoryId,
+           int quantity,
+           int min,
+           int max
+           )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithQuantity(quantity)
+                .WithProductCode(productCode)
+                .WithMaxInStock(max)
+                .WithMinInStock(min)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
+        private static AddSellDto CreateAddSellDto
+            ( int productCode, int quantity , DateTime dateTime)
+        {
+            return new SellDtoBuilder()
+              .WithProductCode(productCode)
+              .WithQuantity(quantity)
+              .WithDateTime(dateTime)
+              .Build();
         }
     }
 }

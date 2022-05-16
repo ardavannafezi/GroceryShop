@@ -25,22 +25,17 @@ namespace GroceryShop.Services.Test.Unit
     {
 
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly SellServices _sut;
         private readonly SellRepository _repository;
-        private readonly ProductRepository _productRepository;
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
 
         public SellProductServiceTest()
         {
             _dataContext = new EFInMemoryDatabase()
                 .CreateDataContext<EFDataContext>();
-            _productRepository = new EFProductRepository(_dataContext);
             _repository = new EFSellRepository(_dataContext);
             _unitOfWork = new EFUnitOfWork(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _sut = new SellAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
+            _sut = new SellAppServices(_repository, _unitOfWork);
         }
 
         [Fact]
@@ -49,10 +44,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(6)
                .Build();
@@ -68,7 +62,8 @@ namespace GroceryShop.Services.Test.Unit
 
             _dataContext.Sells.Count(_ => _.ProductCode == dto.ProductCode
                 && _.Quantity == dto.Quantity);
-            _productRepository.GetQuantity(dto.ProductCode).Should().Be(4);
+            _dataContext.Products.FirstOrDefault(_ => _.ProductCode == dto.ProductCode)
+                .Quantity.Should().Be(4);
 
         }
 
@@ -78,10 +73,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(2)
                .Build();
@@ -119,10 +113,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(6)
                .Build();
@@ -147,10 +140,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(6)
                .Build();
@@ -167,7 +159,7 @@ namespace GroceryShop.Services.Test.Unit
             _dataContext.Imports.FirstOrDefault(_ => _.Id == sell.Id)
                 .Should().BeNull();
 
-            int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;
+            int productCode = _repository.FindProductById(sell.ProductCode).ProductCode;
             _dataContext.Products
                 .FirstOrDefault(_ => _.ProductCode == productCode)
                 .Quantity.Should().Be(7);
@@ -188,10 +180,9 @@ namespace GroceryShop.Services.Test.Unit
             var category = CategoryFactory.CreateCategory("labaniyat");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
             var product = new ProductFactory()
                .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
+               .WithCategoryId(category.Id)
                .WithProductCode(1)
                .WithQuantity(6)
                .Build();
@@ -213,7 +204,7 @@ namespace GroceryShop.Services.Test.Unit
            _dataContext.Sells.Any(_ => _.ProductCode == 1
                 && _.Quantity == 5).Should().BeTrue();
 
-            int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;
+            int productCode = _repository.FindProductById(sell.ProductCode).ProductCode;
             _dataContext.Products
                 .FirstOrDefault(_ => _.ProductCode == productCode)
                 .Quantity.Should().Be(2);

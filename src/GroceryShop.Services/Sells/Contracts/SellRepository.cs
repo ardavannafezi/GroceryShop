@@ -9,9 +9,15 @@ namespace GroceryShop.Services.Sells.Contracts
         void Add(Sell sell);
         List<GetSellsDto> GetAll();
         bool isExist(int id);
-        public void Delete(int id);
+        public void Delete(Sell sell);
         Sell GetById(int id);
         void Update(Sell sell);
         List<Sell> GetByProduct(int id);
+        bool isProductCodeExist(int productCode);
+        Product FindProductById(int productCode);
+        void UpdateProduct(Product product);
+        int GetProductMaxInStock(int productCode);
+        int GetProductMinInStock(int productCode);
+
     }
 }

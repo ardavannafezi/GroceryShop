@@ -4,12 +4,8 @@ using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
-using GroceryShop.Persistence.EF.Categories;
-using GroceryShop.Persistence.EF.Products;
 using GroceryShop.Persistence.EF.Sells;
-using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Imports;
-using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Services.Sells.Contracts;
 using GroceryShop.Specs.Infrastructure;
 using GroceryShop.TestTools.categories;
@@ -26,82 +22,59 @@ namespace GroceryShop.Specs.SellProducts
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "فروش کالا را مدیریت",
-      InOrderTo = "فروش حذف کنم"
+      InOrderTo = "فروش کالا را حذف کنم"
   )]
     public class DeleteSell : EFDataContextDatabaseFixture
     {
 
         private readonly EFDataContext _dataContext;
-        private readonly ProductServices _productSut;
         private readonly SellServices _sut;
-
-        private readonly ProductRepository _productRepository;
         private readonly SellRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
-        private readonly CategoryRepository _categoryRepository;
-        private Category _category;
-        private Product _product;
-        Action expected;
         Sell sell;
-
+        Category category;
+        Product product;
+        int LastQuantity;
         public DeleteSell(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _repository = new EFSellRepository(_dataContext);
-            _categoryRepository = new EFCategoryRepository(_dataContext);
-            _productRepository = new EFProductRepository(_dataContext);
 
-            _sut = new SellAppServices(_repository, _unitOfWork, _categoryRepository, _productRepository);
+            _sut = new SellAppServices(_repository, _unitOfWork);
         }
 
-        [Given("ورودی کالا با کد '01' در فهرست ورودی کالا ها موجود است")]
+        [Given("فروش کالای با کد 1 از کالایی با کد 1 و تعداد 1 از 6 تا موجودی کالا در فهرست فروش کالا ها موجود است")]
         public void Given()
         {
-
-            var category = CategoryFactory.CreateCategory("labaniyat");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
-            int categoryId = _categoryRepository.FindByName(category.Name).Id;
-            var product = new ProductFactory()
-               .WithName("maste shirazi")
-               .WithCategoryId(categoryId)
-               .WithProductCode(1)
-               .WithQuantity(6)
-               .Build();
-            _dataContext.Manipulate(_ => _.Products.Add(product));
-
-            sell = new SellBuilder()
-                .WithProductCode(1)
-                .WithQuantity(1)
-                .Build();
-            _dataContext.Manipulate(_ => _.Sells.Add(sell));
-
+            CreateCategoryInDatabase("labaniyat");
+            CreateProductInDatabase("maste shirazi", 1, category.Id, 6);
+            LastQuantity = product.Quantity;
+            CreateSellInDatabase( 1 , 1 , DateTime.Now);
         }
 
-        [When("ورودی کالای کد '01' را حذف می کنیم")]
+        [When("فروش کد 1 را حذف می کنیم")]
         public void When()
         {
             _sut.Delete(sell.Id);
         }
 
-        [Then("ورودی کالای کد '01'وجود ندارد")]
+        [Then("هیچ فروشی با کد 1 وجود ندارد")]
         public void Then()
         {
             _dataContext.Imports.FirstOrDefault(_ => _.Id == sell.Id)
                 .Should().BeNull();
         }
 
-        [And(" تعداد 7عدد از کالا موجود می باشد")]
+        [And(" تعداد 7 عدد از کالا موجود می باشد")]
         public void ThenAnd()
         {
-            int productCode = _productRepository.FindById(sell.ProductCode).ProductCode;
-            _dataContext.Products
-                .FirstOrDefault(_ => _.ProductCode == productCode)
-                .Quantity.Should().Be(7);
-        }
+            int QuantityAfterDelete = LastQuantity + sell.Quantity;
 
+            _dataContext.Products
+                .FirstOrDefault(_ => _.ProductCode == sell.ProductCode)
+                .Quantity.Should().Be(QuantityAfterDelete);
+        }
 
         [Fact]
         public void Run()
@@ -112,6 +85,37 @@ namespace GroceryShop.Specs.SellProducts
             , _ => Then()
             , _ => ThenAnd()
             );
+        }
+
+        private void CreateCategoryInDatabase(string name)
+        {
+            category = CategoryFactory.CreateCategory(name);
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+        }
+
+        private void CreateProductInDatabase
+           (string name,
+           int productCode,
+           int categoryId,
+           int quantity
+           )
+        {
+            product = new ProductFactory()
+                .WithName(name)
+                .WithCategoryId(categoryId)
+                .WithProductCode(productCode)
+                .WithQuantity(quantity)
+                .Build();
+            _dataContext.Manipulate(_ => _.Products.Add(product));
+        }
+
+        private void CreateSellInDatabase(int productCode, int quantity, DateTime dateTime)
+        {
+            sell = new SellBuilder()
+                            .WithProductCode(1)
+                            .WithQuantity(1)
+                            .Build();
+            _dataContext.Manipulate(_ => _.Sells.Add(sell));
         }
     }
 }

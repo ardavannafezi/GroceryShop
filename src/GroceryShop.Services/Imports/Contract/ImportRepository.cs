@@ -13,5 +13,9 @@ namespace GroceryShop.Services.Products.Contracts
         void Delete(int id);
         void Update(Import import);
         List<Import> GetByProduct(int Productid);
+        bool isProductCodeExist(int productCode);
+        Product FindProductById(int productCode);
+        int GetMaxInStock(int productCode);
+        void UpdateProduct(Product product);
     }
 }

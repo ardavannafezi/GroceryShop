@@ -10,49 +10,39 @@ namespace GroceryShop.Services.Imports
 {
     public class ImportAppServices : ImportServices
     {
-        private readonly ProductRepository _productRepository;
-
         private readonly ImportRepository _repository;
-
         private readonly UnitOfWork _unitOfWork;
 
-        private readonly CategoryRepository _categoryRepository;
-
-
         public ImportAppServices(
-
             ImportRepository repository,
-            UnitOfWork unitOfWork,
-            CategoryRepository cateogryRepository,
-            ProductRepository productRepository)
+            UnitOfWork unitOfWork
+            )
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
-            _categoryRepository = cateogryRepository;
-            _productRepository = productRepository;
         }
 
         public void Add(AddImportDto dto)
         {
 
-            bool isProductCodeExist = _productRepository.isProductCodeExist(dto.ProductCode);
+            bool isProductCodeExist = _repository.isProductCodeExist(dto.ProductCode);
             if (!isProductCodeExist)
             {
                 throw new ProductNotFoundExeption();
             }
 
 
-            int InStock = _productRepository.FindById(dto.ProductCode).Quantity;
-            if (InStock + dto.Quantity > _productRepository
+            int InStock = _repository.FindProductById(dto.ProductCode).Quantity;
+            if (InStock + dto.Quantity > _repository
                 .GetMaxInStock(dto.ProductCode))
             {
                 throw new ReachedMaximumAllowedInStockExeption();
             }
 
 
-            Product product = _productRepository.FindById(dto.ProductCode);
+            Product product = _repository.FindProductById(dto.ProductCode);
             product.Quantity = product.Quantity + dto.Quantity;
-            _productRepository.Update(product);
+            _repository.UpdateProduct(product);
 
 
             var import = new Import
@@ -62,10 +52,6 @@ namespace GroceryShop.Services.Imports
             };
 
             _repository.Add(import);
-
-
-            
-
             _unitOfWork.Commit();
         }
 
@@ -77,13 +63,13 @@ namespace GroceryShop.Services.Imports
                 throw new ImportNotFoundExeption();
             };
 
-            Product product = _productRepository
-                .FindById(_repository.GetById(id).ProductCode);
+            Product product = _repository
+                .FindProductById(_repository.GetById(id).ProductCode);
 
-            product.Quantity = product.Quantity - _repository.GetById(id).Quantity;
-                
-                
-            _productRepository.Update(product);
+            int importQuantity = _repository.GetById(id).Quantity;
+            product.Quantity = product.Quantity - importQuantity;
+
+            _repository.UpdateProduct(product);
 
             var import =  _repository.GetById(id);
             _repository.Delete(id);
@@ -102,14 +88,14 @@ namespace GroceryShop.Services.Imports
                 throw new ImportNotFoundExeption();
             };
 
-            Product product = _productRepository
-               .FindById(_repository.GetById(id).ProductCode);
+            int ImportproductCode = _repository.GetById(id).ProductCode;
+            Product product = _repository
+               .FindProductById(ImportproductCode);
 
             product.Quantity = product.Quantity 
                 - _repository.GetById(id).Quantity + dto.Quantity;
 
-            _productRepository.Update(product);
-
+            _repository.UpdateProduct(product);
 
             Import import = _repository.GetById(id);
 

@@ -1,4 +1,5 @@
 ﻿using GroceryShop.Entities;
+using System;
 
 namespace GroceryShop.TestTools.Sells
 {
@@ -11,6 +12,7 @@ namespace GroceryShop.TestTools.Sells
             {
                 ProductCode = 1,
                 Quantity = 4,
+                dateTime = DateTime.Now
             };
         }
         public SellBuilder WithProductCode(int code)
@@ -23,7 +25,12 @@ namespace GroceryShop.TestTools.Sells
             sell.Quantity = quantity;
             return this;
         }
-        
+        public SellBuilder WithDateTime(DateTime dateTime)
+        {
+            sell.dateTime = dateTime;
+            return this;
+        }
+
         public Sell Build()
         {
             return sell;
