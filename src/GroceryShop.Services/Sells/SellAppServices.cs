@@ -1,8 +1,6 @@
 ﻿using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Application;
-using GroceryShop.Services.Categories.Contracts;
 using GroceryShop.Services.Products;
-using GroceryShop.Services.Products.Contracts;
 using GroceryShop.Services.Sells.Contract;
 using GroceryShop.Services.Sells.Contracts;
 using System.Collections.Generic;
@@ -24,7 +22,6 @@ namespace GroceryShop.Services.Imports
 
         public void Add(AddSellDto dto)
         {
-
             bool isProductCodeExist = _repository.isProductCodeExist(dto.ProductCode);
             if (!isProductCodeExist)
             {
@@ -37,18 +34,18 @@ namespace GroceryShop.Services.Imports
 
                 throw new NotEcoughtInStock();
             }
-            product.Quantity = product.Quantity - dto.Quantity;
-            _repository.UpdateProduct(product);
 
+            product.Quantity = product.Quantity - dto.Quantity;
 
             var sell = new Sell
             {
                 ProductCode = dto.ProductCode,
                 Quantity = dto.Quantity,
             };
+
+            _repository.UpdateProduct(product);
             _repository.Add(sell);
             _unitOfWork.Commit();
-
 
             if (product.Quantity <= _repository
                 .GetProductMaxInStock(dto.ProductCode))
@@ -66,13 +63,11 @@ namespace GroceryShop.Services.Imports
 
             Sell sell = _repository.GetById(id);
 
-            Product product = _repository
-                .FindProductById(sell.ProductCode);
+            Product product = _repository.FindProductById(sell.ProductCode);
 
             product.Quantity = product.Quantity + sell.Quantity;
 
             _repository.UpdateProduct(product);
-
             _repository.Delete(sell);
             _unitOfWork.Commit();
         }
@@ -89,20 +84,18 @@ namespace GroceryShop.Services.Imports
                 throw new SellNotFoundExeption();
             };
 
-            Product product = _repository
-               .FindProductById(_repository.GetById(id).ProductCode);
-
-            product.Quantity = product.Quantity
-                + _repository.GetById(id).Quantity - dto.Quantity;
-
-            _repository.UpdateProduct(product);
-
-
             Sell sell = _repository.GetById(id);
+            int importProductCode = _repository.GetById(id).ProductCode;
+
+            Product product = _repository.FindProductById(importProductCode);
+            int afterUpdateQuantity = product.Quantity + sell.Quantity - dto.Quantity;
+
+            product.Quantity = afterUpdateQuantity ;
 
             sell.ProductCode = dto.ProductCode;
             sell.Quantity = dto.Quantity;
 
+            _repository.UpdateProduct(product);
             _repository.Update(sell);
             _unitOfWork.Commit();
         }

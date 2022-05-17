@@ -1,12 +1,10 @@
-﻿using System;
-using GroceryShop.Entities;
+﻿using GroceryShop.Entities;
 using GroceryShop.Infrastructure.Test;
 using GroceryShop.Persistence.EF;
 using GroceryShop.Specs.Infrastructure;
 using FluentAssertions;
 using Xunit;
 using static GroceryShop.Specs.BDDHelper;
-using GroceryShop.Services.Categories.Contracts;
 using BookStore.Persistence.EF;
 using GroceryShop.Infrastructure.Application;
 using GroceryShop.TestTools.categories;

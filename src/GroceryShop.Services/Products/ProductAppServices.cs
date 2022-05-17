@@ -54,8 +54,10 @@ namespace GroceryShop.Services.Products
             {
                 throw new ProductNotFoundExeption();
             }
-           
-            _repository.Delete(_repository.FindById(code));
+
+            Product product = _repository.FindById(code);
+
+            _repository.Delete(product);
             _unitOfWork.Commit();
         }
 
@@ -66,6 +68,7 @@ namespace GroceryShop.Services.Products
 
         public void Update(UpdateProductDto dto, int id)
         {
+
             string productName = _repository.GetNameByCode(id);
 
             bool isProductNameAlreadyExist =
@@ -90,11 +93,8 @@ namespace GroceryShop.Services.Products
             product.MaxInStock = dto.MaxInStock;
             product.MinInStock = dto.MinInStock;
 
-
-
             _repository.Update(product);
             _unitOfWork.Commit();
-
         }
     }
 }

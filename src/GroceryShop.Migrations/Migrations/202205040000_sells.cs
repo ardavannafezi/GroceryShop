@@ -25,11 +25,6 @@ namespace GroceryShop.Migrations
                             .WithColumn("ProductCode").AsInt32()
                             .ForeignKey("FK_Sells_Products", "Products", "ProductCode")
                             .WithColumn("Quantity").AsInt32().NotNullable();
-                            
-
-
-
         }
-
     }
 }

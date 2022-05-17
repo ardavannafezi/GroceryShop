@@ -10,7 +10,7 @@ namespace GroceryShop.Services.Products.Contracts
         List<GetImportsDto> GetAll();
         Import GetById(int id);
         bool isExist(int id);
-        void Delete(int id);
+        void Delete(Import import);
         void Update(Import import);
         List<Import> GetByProduct(int Productid);
         bool isProductCodeExist(int productCode);

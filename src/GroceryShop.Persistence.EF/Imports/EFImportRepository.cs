@@ -21,9 +21,9 @@ namespace GroceryShop.Persistence.EF.Imports
             _dataContext.Add(import);
         }
 
-        public void Delete(int id)
+        public void Delete(Import import)
         {
-            _dataContext.Imports.Remove(GetById(id));
+            _dataContext.Imports.Remove(import);
         }
 
         public Product FindProductById(int productCode)

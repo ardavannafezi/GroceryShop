@@ -16,7 +16,7 @@ using static GroceryShop.Specs.BDDHelper;
 
 namespace GroceryShop.Specs.BuyProducts
 {
-    [Scenario("تعریف ورودی کالا")]
+    [Scenario("حذف ورودی کالا")]
     [Feature("",
       AsA = "فروشنده ",
       IWantTo = "ورودی کالا را مدیریت",
